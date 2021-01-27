@@ -48,7 +48,7 @@ class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
      */
     private function getRiddles(): array
     {
-        return Riddles::RIDDLES;
+        return Riddles::getRiddles();
     }
 
     protected function generateOneAnswer()
