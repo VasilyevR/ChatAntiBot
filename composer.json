@@ -1,0 +1,39 @@
+{
+  "type": "project",
+  "name": "vasilyevr/spammer-kicker-telegram-bot",
+  "description": "Spammer kicker Telegram Bot",
+  "keywords": ["telegram", "bot", "antispam", "ban"],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "VasilyevR",
+      "email": "romanvasilyev@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "ext-ctype": "*",
+    "ext-iconv": "*",
+    "ext-intl": "^7.3",
+    "ext-sqlite3": "^7.3",
+    "guzzlehttp/guzzle": "^7.2",
+    "http-interop/http-factory-guzzle": "^1.0",
+    "tg-bot-api/bot-api-base": "^1.7"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
