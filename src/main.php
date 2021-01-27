@@ -16,11 +16,13 @@ use TgBotApi\BotApiBase\BotApi;
 use TgBotApi\BotApiBase\BotApiNormalizer;
 
 if (empty($BOT_API_KEY)) {
-    exit('Please create BOT_API_KEY constant in config/parameters.php');
+    echo 'Please create BOT_API_KEY constant in config/parameters.php';
+    return;
 }
 
 if (empty($TIME_OUT_PUZZLE_REPLY)) {
-    exit('Please create TIME_OUT_PUZZLE_REPLY constant in config/parameters.php');
+    echo 'Please create TIME_OUT_PUZZLE_REPLY constant in config/parameters.php';
+    return;
 }
 
 $database = new SQLite3('var/db.sqlite', SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);

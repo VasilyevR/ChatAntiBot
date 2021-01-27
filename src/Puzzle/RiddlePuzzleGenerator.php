@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Puzzle;
 
+use \Riddles;
+
 class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
 {
     protected const MAX_CHOICES_COUNT = 4;
@@ -46,7 +48,7 @@ class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
      */
     private function getRiddles(): array
     {
-        return \Riddles::RIDDLES;
+        return Riddles::RIDDLES;
     }
 
     protected function generateOneAnswer()
