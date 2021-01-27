@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App;
 
-include_once('vendor/autoload.php');
-require_once('config/parameters.php');
-require_once('config/riddles.php');
+include_once 'vendor/autoload.php';
+require_once 'config/parameters.php';
+require_once 'config/riddles.php';
 
 use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;

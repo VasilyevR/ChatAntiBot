@@ -21,12 +21,12 @@ class ChatSettings
     }
 
     /**
-     * @param int $id
+     * @param int $chatId
      * @return string|null
      */
-    public function getPuzzleType(int $id): ?string
+    public function getPuzzleType(int $chatId): ?string
     {
-        $results = $this->database->query(sprintf('SELECT type FROM chat_puzzle_type WHERE chat_id = %d', $id));
+        $results = $this->database->query(sprintf('SELECT type FROM chat_puzzle_type WHERE chat_id = %d', $chatId));
         if (false === $results) {
             return null;
         }
@@ -39,15 +39,15 @@ class ChatSettings
 
     //TODO: Add bot command to change puzzle type for chat
     /**
-     * @param int $id
+     * @param int $chatId
      * @param string $type
      */
-    public function setPuzzleType(int $id, string $type): void
+    public function setPuzzleType(int $chatId, string $type): void
     {
         $this->database->query(
             sprintf(
                 'INSERT OR REPLACE INTO chat_puzzle_type (chat_id, type) VALUES (%d, %s)',
-                $id,
+                $chatId,
                 $type
             )
         );

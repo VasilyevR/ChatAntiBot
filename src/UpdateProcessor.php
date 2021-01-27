@@ -206,7 +206,7 @@ class UpdateProcessor
     private function sendPuzzle(int $chatId, int $messageId, string $question, array $choices): void
     {
         $keyboardButtons = [];
-        foreach ($choices as $key => $choice) {
+        foreach ($choices as $choice) {
             $button = new InlineKeyboardButtonType();
             $button->text = $choice;
             $button->callbackData = $choice;
