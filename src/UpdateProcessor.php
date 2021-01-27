@@ -92,7 +92,6 @@ class UpdateProcessor
             $this->botSettingsService->setMessageOffset($update->updateId + 1);
             if (null !== $message) {
                 //TODO: Add commands to bot
-                //$this->processCommands($message);
                 $this->processNewChatMembers($message);
             }
             $this->processPuzzleAnswer($update);
