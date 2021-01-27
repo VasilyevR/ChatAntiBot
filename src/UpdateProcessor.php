@@ -45,7 +45,7 @@ class UpdateProcessor
     /**
      * @var TelegramSettings
      */
-    private $telegramSettingsService;
+    private $botSettingsService;
 
     /**
      * @var PuzzleTask
@@ -73,7 +73,7 @@ class UpdateProcessor
     public function run()
     {
         $this->chatSettingsService = new ChatSettings($this->database);
-        $this->telegramSettingsService = new TelegramSettings($this->database);
+        $this->botSettingsService = new TelegramSettings($this->database);
         $this->puzzleTaskService = new PuzzleTask($this->database);
         $botInfo = $this->getBotInfo();
         $this->botUserName = $botInfo->username;
@@ -89,7 +89,7 @@ class UpdateProcessor
     {
         foreach ($updates as $update) {
             $message = $update->message;
-            $this->telegramSettingsService->setMessageOffset($update->updateId + 1);
+            $this->botSettingsService->setMessageOffset($update->updateId + 1);
             if (null !== $message) {
                 //TODO: Add commands to bot
                 //$this->processCommands($message);
@@ -229,7 +229,7 @@ class UpdateProcessor
     private function getUpdates(): array
     {
         $getUpdates = new GetUpdatesMethod();
-        $messageOffset = $this->telegramSettingsService->getMessageOffset();
+        $messageOffset = $this->botSettingsService->getMessageOffset();
         if ($messageOffset) {
             $getUpdates->offset = $messageOffset;
         }
