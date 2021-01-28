@@ -7,6 +7,7 @@ include_once 'vendor/autoload.php';
 require_once 'config/parameters.php';
 require_once 'config/riddles.php';
 
+use App\Dto\BotSettingsDto;
 use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Http\Factory\Guzzle\StreamFactory;
@@ -25,6 +26,8 @@ if (empty($TIME_OUT_PUZZLE_REPLY)) {
     return;
 }
 
+$botSettingsDto = new BotSettingsDto();
+$botSettingsDto->setTimeOutPuzzleReply($TIME_OUT_PUZZLE_REPLY);
 $database = new SQLite3('var/db.sqlite', SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
 $requestFactory = new RequestFactory();
 $streamFactory = new StreamFactory();
@@ -33,5 +36,5 @@ $apiClient = new ApiClient($requestFactory, $streamFactory, $client);
 $bot = new BotApi($BOT_API_KEY, $apiClient, new BotApiNormalizer());
 
 DatabaseService::init($database);
-$updateProcessor = new UpdateProcessor($bot, $database, $TIME_OUT_PUZZLE_REPLY);
-$updateProcessor->run();
+$updateProcessor = new UpdateProcessor($bot, $database);
+$updateProcessor->run($botSettingsDto);
