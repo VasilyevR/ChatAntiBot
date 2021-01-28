@@ -1,7 +1,9 @@
 FROM php:7.3-fpm
 RUN apt-get update \
-    && apt-get install -y composer libicu-dev cron git
+    && apt-get install -y libicu-dev cron git
 RUN docker-php-ext-install intl
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php --install-dir=/usr/local/bin/ --filename=composer
 WORKDIR /var/www
 RUN composer install
 COPY crontab.txt /crontab.txt
