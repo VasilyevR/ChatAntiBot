@@ -1,4 +1,5 @@
 FROM php:7.3-fpm
+RUN apt-get update \
     && apt-get install -y composer libicu-dev cron git
 RUN docker-php-ext-install intl
 WORKDIR /var/www
