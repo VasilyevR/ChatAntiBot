@@ -15,8 +15,14 @@ cp config/riddles_sample.php config/riddles.php
 ```
 Edit config/parameters.php with your ***BOT_API_KEY*** and config/riddles.php with your riddles if needs.
 
+## Build
+
+```sh
+docker build -f dockerfiles/php-fpm/Dockerfile -t imagefile .
+```
+
 ## Run
 
 ```sh
-docker-compose up --build
+docker run -it imagefile
 ```

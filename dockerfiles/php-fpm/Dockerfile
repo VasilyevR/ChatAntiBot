@@ -6,9 +6,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/usr/bin/ --filename=composer
 WORKDIR /var/www
 CMD composer install
-COPY crontab.txt /crontab.txt
-COPY script.sh /script.sh
-COPY entry.sh /entry.sh
+COPY dockerfiles/crontab.txt /crontab.txt
+COPY dockerfiles/script.sh /script.sh
+COPY dockerfiles/php-fpm/entry.sh /entry.sh
 RUN chmod 755 /script.sh /entry.sh
 RUN /usr/bin/crontab /crontab.txt
 CMD /entry.sh ; php-fpm

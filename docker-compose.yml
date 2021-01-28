@@ -1,8 +1,0 @@
-version: '3'
-services:
-  php-fpm:
-    build:
-#      context: dockerfiles/php-fpm
-      context: dockerfiles/php-fpm-apline
-    volumes:
-      - ./:/var/www
