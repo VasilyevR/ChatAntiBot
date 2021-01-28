@@ -10,9 +10,10 @@ RUN apk add --update-cache \
         php-sqlite3 \
         git
 RUN docker-php-ext-install intl
-COPY /usr/bin/composer /usr/bin/composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php --install-dir=/usr/bin/ --filename=composer
 WORKDIR /var/www
-RUN composer install
+CMD composer install
 COPY crontab.txt /crontab.txt
 COPY script.sh /script.sh
 COPY entry.sh /entry.sh
