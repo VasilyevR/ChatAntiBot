@@ -15,12 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the docker-compose stack
-      run: docker-compose -f docker-compose.yml build
-#    - name: Check running containers
-#      run: docker ps -a
-#    - name: Check logs
-#      run: docker logs backend
-#    - name: Run test suite
-#      run: docker exec backend pytest --skip-auth
-#    - name: Build the Docker image
-#      run: docker build . --file dockerfiles/php-fpm/Dockerfile --tag chat-anti-bot-image:$(date +%s)
+      run: docker build . --file dockerfiles/php-fpm/Dockerfile --tag chat-anti-bot-image:$(date +%s)
