@@ -3,9 +3,9 @@ RUN apt-get update \
     && apt-get install -y libicu-dev cron git
 RUN docker-php-ext-install intl
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php --install-dir=/usr/local/bin/ --filename=composer
+RUN php composer-setup.php --install-dir=/usr/bin/ --filename=composer
 WORKDIR /var/www
-RUN composer install
+CMD composer install
 COPY crontab.txt /crontab.txt
 COPY script.sh /script.sh
 COPY entry.sh /entry.sh
