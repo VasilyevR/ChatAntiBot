@@ -132,12 +132,12 @@ class TelegramBotClient
      */
     public function muteUser(int $chatId, int $userId): void
     {
-        $restrictChatMemberMethod = new RestrictChatMemberMethod();
-        $restrictChatMemberMethod->chatId = $chatId;
-        $restrictChatMemberMethod->userId = $userId;
-        $restrictChatMemberMethod->canSendMessages = false;
+        $restrictMemberMethod = new RestrictChatMemberMethod();
+        $restrictMemberMethod->chatId = $chatId;
+        $restrictMemberMethod->userId = $userId;
+        $restrictMemberMethod->canSendMessages = false;
         try {
-            $this->botApi->restrict($restrictChatMemberMethod);
+            $this->botApi->restrict($restrictMemberMethod);
         } catch (ResponseException $exception) {
             throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
@@ -150,12 +150,12 @@ class TelegramBotClient
      */
     public function unmuteUser(int $chatId, int $userId): void
     {
-        $restrictChatMemberMethod = new RestrictChatMemberMethod();
-        $restrictChatMemberMethod->chatId = $chatId;
-        $restrictChatMemberMethod->userId = $userId;
-        $restrictChatMemberMethod->canSendMessages = true;
+        $restrictMemberMethod = new RestrictChatMemberMethod();
+        $restrictMemberMethod->chatId = $chatId;
+        $restrictMemberMethod->userId = $userId;
+        $restrictMemberMethod->canSendMessages = true;
         try {
-            $this->botApi->restrict($restrictChatMemberMethod);
+            $this->botApi->restrict($restrictMemberMethod);
         } catch (ResponseException $exception) {
             throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
