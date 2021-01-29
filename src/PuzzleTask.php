@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Dto\PuzzleTaskDto;
 use App\Dto\PuzzleTaskUserDto;
+use App\Dto\PuzzleTaskDto;
 use SQLite3;
 
 class PuzzleTask

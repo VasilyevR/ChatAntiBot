@@ -51,5 +51,5 @@ $botApi = new BotApi($BOT_API_KEY, $apiClient, new BotApiNormalizer());
 $botClient = new TelegramBotClient($botApi);
 
 DatabaseService::init($database);
-$updateProcessor = new UpdateProcessor();
+$updateProcessor = new UpdateManager();
 $updateProcessor->run($botClient, $database, $logger, $botSettingsDto);
