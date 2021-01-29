@@ -20,6 +20,7 @@
     "ext-sqlite3": "^7.3",
     "guzzlehttp/guzzle": "^7.2",
     "http-interop/http-factory-guzzle": "^1.0",
+    "monolog/monolog": "^2.2",
     "tg-bot-api/bot-api-base": "^1.7"
   },
   "require-dev": {
