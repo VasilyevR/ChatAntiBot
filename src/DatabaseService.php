@@ -18,7 +18,10 @@ class DatabaseService
             return;
         }
         $database->exec(
-            'CREATE TABLE telegram (offset INTEGER)'
+            'CREATE TABLE telegram (id INTEGER, offset INTEGER)'
+        );
+        $database->exec(
+            'CREATE UNIQUE INDEX telegram_id_uindex ON telegram (id)'
         );
         $database->exec(
             'CREATE TABLE puzzle_task (chat_id INTEGER, user_id INTEGER, answer STRING, message_id INTEGER, date_time INTEGER)'
