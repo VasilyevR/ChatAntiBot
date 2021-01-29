@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Puzzle;
 
-use \Riddles;
+use Noodlehaus\Config;
+use Noodlehaus\Parser\Php;
 
 class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
 {
@@ -48,7 +49,9 @@ class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
      */
     private function getRiddles(): array
     {
-        return Riddles::getRiddles();
+        $config = new Config('config/riddles.php', new Php());
+
+        return $config->all();
     }
 
     protected function generateOneAnswer()
