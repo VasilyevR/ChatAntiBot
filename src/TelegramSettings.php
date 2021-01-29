@@ -22,7 +22,7 @@ class TelegramSettings
      */
     public function setMessageOffset(int $updateId): void
     {
-        $this->database->query(sprintf('UPDATE telegram SET offset = %d', $updateId));
+        $this->database->query(sprintf('REPLACE INTO telegram (id, offset) VALUES (1, %d)', $updateId));
     }
 
     /**
