@@ -29,11 +29,5 @@ class DatabaseService
         $database->exec(
             'CREATE UNIQUE INDEX puzzle_task_chat_id_user_id_uindex ON puzzle_task (chat_id, user_id);'
         );
-        $database->exec(
-            'CREATE TABLE chat_puzzle_type (chat_id INTEGER, type STRING)'
-        );
-        $database->exec(
-            'CREATE UNIQUE INDEX chat_puzzle_types_chat_id_uindex ON chat_puzzle_type (chat_id)'
-        );
     }
 }
