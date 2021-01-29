@@ -5,16 +5,14 @@ namespace App;
 
 use App\Dto\BotSettingsDto;
 use SQLite3;
-use TgBotApi\BotApiBase\BotApi;
 use TgBotApi\BotApiBase\Exception\ResponseException;
-use TgBotApi\BotApiBase\Method\KickChatMemberMethod;
 
 class NonApprovedMemberProcessor
 {
     /**
-     * @var BotApi
+     * @var TelegramBotClient
      */
-    private $botApi;
+    private $botClient;
 
     /**
      * @var PuzzleTask
@@ -22,12 +20,12 @@ class NonApprovedMemberProcessor
     private $puzzleTaskService;
 
     /**
-     * @param BotApi $botApi
+     * @param TelegramBotClient $botClient
      * @param SQLite3 $database
      */
-    public function __construct(BotApi $botApi, SQLite3 $database)
+    public function __construct(TelegramBotClient $botClient, SQLite3 $database)
     {
-        $this->botApi = $botApi;
+        $this->botClient = $botClient;
         $this->puzzleTaskService = new PuzzleTask($database);
     }
 
@@ -40,19 +38,8 @@ class NonApprovedMemberProcessor
         $nonApprovedUsers = $this->puzzleTaskService->getNonApprovedUsers($botSettingsDto->getTimeOutPuzzleReply());
 
         foreach ($nonApprovedUsers as $taskUserDto) {
-            $this->banUser($taskUserDto->getChatId(), $taskUserDto->getUserId());
+            $this->botClient->banUser($taskUserDto->getChatId(), $taskUserDto->getUserId());
             $this->puzzleTaskService->deletePuzzleTask($taskUserDto->getChatId(), $taskUserDto->getUserId());
         }
-    }
-
-    /**
-     * @param int $chatId
-     * @param int $userId
-     * @throws ResponseException
-     */
-    private function banUser(int $chatId, int $userId): void
-    {
-        $kickChatMemberMethod = KickChatMemberMethod::create($chatId, $userId);
-        $this->botApi->kick($kickChatMemberMethod);
     }
 }

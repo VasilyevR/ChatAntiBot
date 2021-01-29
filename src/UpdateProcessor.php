@@ -5,18 +5,13 @@ namespace App;
 
 use App\Dto\BotSettingsDto;
 use SQLite3;
-use TgBotApi\BotApiBase\BotApi;
-use TgBotApi\BotApiBase\Exception\ResponseException;
-use TgBotApi\BotApiBase\Method\GetMeMethod;
-use TgBotApi\BotApiBase\Method\GetUpdatesMethod;
-use TgBotApi\BotApiBase\Type\UpdateType;
 
 class UpdateProcessor
 {
     /**
-     * @var BotApi
+     * @var TelegramBotClient
      */
-    private $botApi;
+    private $botClient;
 
     /**
      * @var SQLite3
@@ -24,12 +19,12 @@ class UpdateProcessor
     private $database;
 
     /**
-     * @param BotApi $botApi
+     * @param TelegramBotClient $botClient
      * @param SQLite3 $database
      */
-    public function __construct(BotApi $botApi, SQLite3 $database)
+    public function __construct(TelegramBotClient $botClient, SQLite3 $database)
     {
-        $this->botApi = $botApi;
+        $this->botClient = $botClient;
         $this->database = $database;
     }
 
@@ -40,16 +35,14 @@ class UpdateProcessor
     public function run(BotSettingsDto $botSettingsDto): void
     {
         $botSettingsService = new TelegramSettings($this->database);
-        $updates = $this->getUpdates($botSettingsService);
+        $updates = $this->botClient->getUpdates($botSettingsService->getMessageOffset());
         if (empty($updates)) {
             return;
         }
-        $botInfo = $this->botApi->getMe(GetMeMethod::create());
-        $botSettingsDto->setBotUserName($botInfo->username);
-
-        $newMembersProcessor = new NewMembersProcessor($this->botApi, $this->database);
-        $puzzleAnswerProcessor = new PuzzleAnswerProcessor($this->botApi, $this->database);
-        $nonApprovedMemberProcessor = new NonApprovedMemberProcessor($this->botApi, $this->database);
+        $botSettingsDto->setBotUserName($this->botClient->getUserName());
+        $newMembersProcessor = new NewMembersProcessor($this->botClient, $this->database);
+        $puzzleAnswerProcessor = new PuzzleAnswerProcessor($this->botClient, $this->database);
+        $nonApprovedMemberProcessor = new NonApprovedMemberProcessor($this->botClient, $this->database);
 
         foreach ($updates as $update) {
             $message = $update->message;
@@ -61,20 +54,5 @@ class UpdateProcessor
             $puzzleAnswerProcessor->processPuzzleAnswer($update, $botSettingsDto);
         }
         $nonApprovedMemberProcessor->banNonApprovedMembers($botSettingsDto);
-    }
-
-    /**
-     * @param TelegramSettings $botSettingsService
-     * @return UpdateType[]
-     * @throws ResponseException
-     */
-    private function getUpdates(TelegramSettings $botSettingsService): array
-    {
-        $getUpdates = new GetUpdatesMethod();
-        $messageOffset = $botSettingsService->getMessageOffset();
-        if ($messageOffset) {
-            $getUpdates->offset = $messageOffset;
-        }
-        return $this->botApi->getUpdates($getUpdates);
     }
 }

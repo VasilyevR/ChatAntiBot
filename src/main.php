@@ -39,8 +39,9 @@ $requestFactory = new RequestFactory();
 $streamFactory = new StreamFactory();
 $client = new Client();
 $apiClient = new ApiClient($requestFactory, $streamFactory, $client);
-$bot = new BotApi($BOT_API_KEY, $apiClient, new BotApiNormalizer());
+$botApi = new BotApi($BOT_API_KEY, $apiClient, new BotApiNormalizer());
+$botClient = new TelegramBotClient($botApi);
 
 DatabaseService::init($database);
-$updateProcessor = new UpdateProcessor($bot, $database);
+$updateProcessor = new UpdateProcessor($botClient, $database);
 $updateProcessor->run($botSettingsDto);
