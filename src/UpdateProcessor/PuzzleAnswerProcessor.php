@@ -56,25 +56,25 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
         }
         try {
             $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getPuzzleMessageId());
-        } catch (BotClientResponseException $e) {
+        } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to delete puzzle message',
                 [
                     'messageId' => $updateDto->getChatId(),
-                    'errorCode' => $e->getCode(),
-                    'error' => $e->getMessage()
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
                 ]
             );
         }
         try {
             $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getEnterMessageId());
-        } catch (BotClientResponseException $e) {
+        } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to delete enter message',
                 [
                     'messageId' => $updateDto->getChatId(),
-                    'errorCode' => $e->getCode(),
-                    'error' => $e->getMessage()
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
                 ]
             );
         }
@@ -84,14 +84,14 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
         if ($updateDto->getAnswer() === $puzzleTaskDto->getAnswer()) {
             try {
                 $this->botClient->unmuteUser($chatId, $userId);
-            } catch (BotClientResponseException $e) {
+            } catch (BotClientResponseException $exception) {
                 $this->logger->error(
                     'Error to unmute new member',
                     [
                         'chatId' => $chatId,
                         'userId' => $userId,
-                        'errorCode' => $e->getCode(),
-                        'error' => $e->getMessage()
+                        'errorCode' => $exception->getCode(),
+                        'error' => $exception->getMessage()
                     ]
                 );
             }
@@ -99,14 +99,14 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
         }
         try {
             $this->botClient->banUser($chatId, $userId);
-        } catch (BotClientResponseException $e) {
+        } catch (BotClientResponseException $exception) {
             $this->logger->error(
                 'Error to ban user with wrong answer',
                 [
                     'chatId' => $chatId,
                     'userId' => $userId,
-                    'errorCode' => $e->getCode(),
-                    'error' => $e->getMessage()
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
                 ]
             );
         }

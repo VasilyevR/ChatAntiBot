@@ -77,28 +77,28 @@ class NewMembersProcessor implements UpdateProcessorInterface
                     $puzzleDto->getQuestion(),
                     $puzzleDto->getChoices()
                 );
-            } catch (BotClientResponseException $e) {
+            } catch (BotClientResponseException $exception) {
                 $this->logger->error(
                     'Error to send puzzle',
                     [
                         'chatId' => $chatId,
                         'messageId' => $updateDto->getMessageId(),
-                        'errorCode' => $e->getCode(),
-                        'error' => $e->getMessage()
+                        'errorCode' => $exception->getCode(),
+                        'error' => $exception->getMessage()
                     ]
                 );
                 continue;
             }
             try {
                 $this->botClient->muteUser($chatId, $newChatMemberId);
-            } catch (BotClientResponseException $e) {
+            } catch (BotClientResponseException $exception) {
                 $this->logger->error(
                     'Error to mute new member',
                     [
                         'chatId' => $chatId,
                         'userId' => $newChatMemberId,
-                        'errorCode' => $e->getCode(),
-                        'error' => $e->getMessage()
+                        'errorCode' => $exception->getCode(),
+                        'error' => $exception->getMessage()
                     ]
                 );
             }
@@ -120,13 +120,13 @@ class NewMembersProcessor implements UpdateProcessorInterface
         $text = sprintf($information, $timeOut);
         try {
             $this->botClient->sendChatMessage($chatId, $text);
-        } catch (BotClientResponseException $e) {
+        } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to send init message',
                 [
                     'chatId' => $chatId,
-                    'errorCode' => $e->getCode(),
-                    'error' => $e->getMessage()
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
                 ]
             );
         }

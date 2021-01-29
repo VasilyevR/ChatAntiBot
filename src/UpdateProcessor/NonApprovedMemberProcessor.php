@@ -50,14 +50,14 @@ class NonApprovedMemberProcessor
             $userId = $taskUserDto->getUserId();
             try {
                 $this->botClient->banUser($chatId, $userId);
-            } catch (BotClientResponseException $e) {
+            } catch (BotClientResponseException $exception) {
                 $this->logger->error(
                     'Error to ban user by timeout',
                     [
                         'chatId' => $chatId,
                         'userId' => $userId,
-                        'errorCode' => $e->getCode(),
-                        'error' => $e->getMessage()
+                        'errorCode' => $exception->getCode(),
+                        'error' => $exception->getMessage()
                     ]
                 );
             }
