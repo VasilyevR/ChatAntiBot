@@ -41,8 +41,8 @@ class TelegramBotClient
     {
         try {
             return $this->botApi->getMe(GetMeMethod::create())->username;
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -59,8 +59,8 @@ class TelegramBotClient
         }
         try {
             $updates = $this->botApi->getUpdates($getUpdatesMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
         return $this->getUpdateDtos($updates);
     }
@@ -90,8 +90,8 @@ class TelegramBotClient
         $sendMessageMethod->parseMode = 'Markdown';
         try {
             $this->botApi->send($sendMessageMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -105,8 +105,8 @@ class TelegramBotClient
         $sendMessageMethod = SendMessageMethod::create($chatId, $text);
         try {
             $this->botApi->send($sendMessageMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -120,8 +120,8 @@ class TelegramBotClient
         $sendMessageMethod = DeleteMessageMethod::create($chatId, $messageId);
         try {
             $this->botApi->delete($sendMessageMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -138,8 +138,8 @@ class TelegramBotClient
         $restrictChatMemberMethod->canSendMessages = false;
         try {
             $this->botApi->restrict($restrictChatMemberMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -156,8 +156,8 @@ class TelegramBotClient
         $restrictChatMemberMethod->canSendMessages = true;
         try {
             $this->botApi->restrict($restrictChatMemberMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 
@@ -171,8 +171,8 @@ class TelegramBotClient
         $kickChatMemberMethod = KickChatMemberMethod::create($chatId, $userId);
         try {
             $this->botApi->kick($kickChatMemberMethod);
-        } catch (ResponseException $e) {
-            throw new BotClientResponseException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        } catch (ResponseException $exception) {
+            throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
     }
 

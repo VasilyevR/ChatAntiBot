@@ -29,8 +29,8 @@ class UpdateManager
         $botSettingsService = new TelegramSettings($database);
         try {
             $updates = $botClient->getUpdates($botSettingsService->getMessageOffset());
-        } catch (BotClientResponseException $e) {
-            $logger->error('Error to get updates', ['code' => $e->getCode(), 'error' => $e->getMessage()]);
+        } catch (BotClientResponseException $exception) {
+            $logger->error('Error to get updates', ['code' => $exception->getCode(), 'error' => $exception->getMessage()]);
             return;
         }
         if (empty($updates)) {
@@ -38,8 +38,8 @@ class UpdateManager
         }
         try {
             $botSettingsDto->setBotUserName($botClient->getUserName());
-        } catch (BotClientResponseException $e) {
-            $logger->error('Error to get bot info', ['code' => $e->getCode(), 'error' => $e->getMessage()]);
+        } catch (BotClientResponseException $exception) {
+            $logger->error('Error to get bot info', ['code' => $exception->getCode(), 'error' => $exception->getMessage()]);
             return;
         }
         $updateProcessorManager = new UpdateProcessorManager($botClient, $database, $logger);
@@ -49,8 +49,8 @@ class UpdateManager
             $botSettingsService->setMessageOffset($updateDto->getUpdateId() + 1);
             try {
                 $updateProcessor = $updateProcessorManager->getUpdateProcessorByUpdateType($updateDto->getType());
-            } catch (UnknownUpdateProcessorException $e) {
-                $logger->error($e->getMessage());
+            } catch (UnknownUpdateProcessorException $exception) {
+                $logger->error($exception->getMessage());
                 return;
             }
             $updateProcessor->processUpdate($updateDto, $botSettingsDto);
