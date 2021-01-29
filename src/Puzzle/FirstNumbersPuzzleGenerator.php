@@ -7,8 +7,9 @@ class FirstNumbersPuzzleGenerator extends AbstractPuzzleGenerator
 {
     protected function getAnswers(): array
     {
+        $maxChoicesCount = $this->getMaxChoicesCount();
         $answers = [];
-        for ($i = 1; $i <= self::MAX_CHOICES_COUNT; $i++) {
+        for ($i = 1; $i <= $maxChoicesCount; $i++) {
             $answers[] = $i;
         }
         return $answers;
