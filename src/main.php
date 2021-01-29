@@ -3,11 +3,8 @@ declare(strict_types=1);
 
 namespace App;
 
-include_once 'vendor/autoload.php';
-require_once 'config/parameters.php';
-require_once 'config/riddles.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-use App\Dto\BotSettingsDto;
 use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Http\Factory\Guzzle\StreamFactory;
@@ -21,24 +18,8 @@ use TgBotApi\BotApiBase\BotApiNormalizer;
 $logger = new Logger('bot');
 $logger->pushHandler(new StreamHandler('var/bot.log', Logger::WARNING));
 
-if (empty($BOT_API_KEY)) {
-    $logger->critical('Please create $BOT_API_KEY variable in config/parameters.php');
-    return;
-}
-
-if (empty($TIME_OUT_PUZZLE_REPLY)) {
-    $logger->critical('Please create $TIME_OUT_PUZZLE_REPLY variable in config/parameters.php');
-    return;
-}
-
-if (empty($PUZZLE_TYPE)) {
-    $logger->critical('Please create $PUZZLE_TYPE variable in config/parameters.php');
-    return;
-}
-
-$botSettingsDto = new BotSettingsDto();
-$botSettingsDto->setTimeOutPuzzleReply($TIME_OUT_PUZZLE_REPLY);
-$botSettingsDto->setPuzzleType($PUZZLE_TYPE);
+$botSettingsLoader = new BotSettingsLoader('config/parameters.php', $logger);
+$botSettingsDto = $botSettingsLoader->getBotSettings();
 
 $database = new SQLite3('var/db.sqlite', SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
 
@@ -46,10 +27,10 @@ $requestFactory = new RequestFactory();
 $streamFactory = new StreamFactory();
 $client = new Client();
 $apiClient = new ApiClient($requestFactory, $streamFactory, $client);
-$botApi = new BotApi($BOT_API_KEY, $apiClient, new BotApiNormalizer());
+$botApi = new BotApi($botSettingsDto->getBotApiKey(), $apiClient, new BotApiNormalizer());
 
 $botClient = new TelegramBotClient($botApi);
 
 DatabaseService::init($database);
-$updateProcessor = new UpdateManager();
-$updateProcessor->run($botClient, $database, $logger, $botSettingsDto);
+$updateManager = new UpdateManager();
+$updateManager->run($botClient, $database, $logger, $botSettingsDto);
