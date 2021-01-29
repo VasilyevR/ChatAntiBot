@@ -11,12 +11,12 @@ use SQLite3;
 
 class UpdateProcessorManager
 {
-    private $puzzleAnswerProcessor;
+    private $answersProcessor;
     private $newMemberProcessor;
 
     public function __construct(TelegramBotClient $botClient, SQLite3 $database, LoggerInterface $logger)
     {
-        $this->puzzleAnswerProcessor = new PuzzleAnswerProcessor($botClient, $database, $logger);
+        $this->answersProcessor = new PuzzleAnswerProcessor($botClient, $database, $logger);
         $this->newMemberProcessor = new NewMembersProcessor($botClient, $database, $logger);
     }
 
@@ -29,7 +29,7 @@ class UpdateProcessorManager
     {
         switch ($updateType) {
             case TelegramUpdateEnum::PUZZLE_ANSWER:
-                return $this->puzzleAnswerProcessor;
+                return $this->answersProcessor;
             case TelegramUpdateEnum::NEW_MEMBER:
                 return $this->newMemberProcessor;
             default:
