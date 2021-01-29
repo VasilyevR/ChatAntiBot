@@ -5,6 +5,7 @@ namespace App;
 
 use App\Dto\BotSettingsDto;
 use App\Puzzle\PuzzleFactory;
+use Psr\Log\LoggerInterface;
 use SQLite3;
 use TgBotApi\BotApiBase\Exception\ResponseException;
 use TgBotApi\BotApiBase\Type\MessageType;
@@ -21,21 +22,26 @@ class NewMembersProcessor
      * @var PuzzleTask
      */
     private $puzzleTaskService;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param TelegramBotClient $botClient
      * @param SQLite3 $database
+     * @param LoggerInterface $logger
      */
-    public function __construct(TelegramBotClient $botClient, SQLite3 $database)
+    public function __construct(TelegramBotClient $botClient, SQLite3 $database, LoggerInterface $logger)
     {
         $this->botClient = $botClient;
         $this->puzzleTaskService = new PuzzleTask($database);
+        $this->logger = $logger;
     }
 
     /**
      * @param MessageType $message
      * @param BotSettingsDto $botSettingsDto
-     * @throws ResponseException
      */
     public function processMessage(
         MessageType $message,
@@ -64,13 +70,38 @@ class NewMembersProcessor
                 $puzzleDto->getAnswer(),
                 $message->messageId
             );
-            $this->botClient->sendKeyboardMarkupMessage(
-                $chatId,
-                $message->messageId,
-                $puzzleDto->getQuestion(),
-                $puzzleDto->getChoices()
-            );
-            $this->botClient->muteUser($chatId, $newChatMemberId);
+            try {
+                $this->botClient->sendKeyboardMarkupMessage(
+                    $chatId,
+                    $message->messageId,
+                    $puzzleDto->getQuestion(),
+                    $puzzleDto->getChoices()
+                );
+            } catch (ResponseException $e) {
+                $this->logger->error(
+                    'Error to send puzzle',
+                    [
+                        'chatId' => $chatId,
+                        'messageId' => $message->messageId,
+                        'errorCode' => $e->getCode(),
+                        'error' => $e->getMessage()
+                    ]
+                );
+                continue;
+            }
+            try {
+                $this->botClient->muteUser($chatId, $newChatMemberId);
+            } catch (ResponseException $e) {
+                $this->logger->error(
+                    'Error to mute new member',
+                    [
+                        'chatId' => $chatId,
+                        'userId' => $newChatMemberId,
+                        'errorCode' => $e->getCode(),
+                        'error' => $e->getMessage()
+                    ]
+                );
+            }
         }
     }
 
@@ -100,6 +131,17 @@ class NewMembersProcessor
 Он будет удален мной из этого чата, но может быть добавлен любым админом.
 Не забудьте меня сделать админом этого чата!';
         $text = sprintf($information, $timeOut);
-        $this->botClient->sendChatMessage($chatId, $text);
+        try {
+            $this->botClient->sendChatMessage($chatId, $text);
+        } catch (ResponseException $e) {
+            $this->logger->warning(
+                'Warning to send init message',
+                [
+                    'chatId' => $chatId,
+                    'errorCode' => $e->getCode(),
+                    'error' => $e->getMessage()
+                ]
+            );
+        }
     }
 }

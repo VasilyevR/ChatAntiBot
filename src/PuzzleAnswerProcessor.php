@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Dto\BotSettingsDto;
+use Psr\Log\LoggerInterface;
 use SQLite3;
 use TgBotApi\BotApiBase\Exception\ResponseException;
 use TgBotApi\BotApiBase\Type\UpdateType;
@@ -19,21 +20,26 @@ class PuzzleAnswerProcessor
      * @var PuzzleTask
      */
     private $puzzleTaskService;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param TelegramBotClient $botClient
      * @param SQLite3 $database
+     * @param LoggerInterface $logger
      */
-    public function __construct(TelegramBotClient $botClient, SQLite3 $database)
+    public function __construct(TelegramBotClient $botClient, SQLite3 $database, LoggerInterface $logger)
     {
         $this->botClient = $botClient;
         $this->puzzleTaskService = new PuzzleTask($database);
+        $this->logger = $logger;
     }
 
     /**
      * @param UpdateType $update
      * @param BotSettingsDto $botSettingsDto
-     * @throws ResponseException
      */
     public function processPuzzleAnswer(UpdateType $update, BotSettingsDto $botSettingsDto): void
     {
@@ -46,14 +52,62 @@ class PuzzleAnswerProcessor
             return;
         }
         $message = $update->callbackQuery->message;
-        $this->botClient->deleteMessage($message->chat->id, $message->messageId);
-        $this->botClient->deleteMessage($replyToMessage->chat->id, $replyToMessage->messageId);
-        $this->puzzleTaskService->deletePuzzleTask($puzzleTaskDto->getChatId(), $puzzleTaskDto->getUserId());
+        try {
+            $this->botClient->deleteMessage($message->chat->id, $message->messageId);
+        } catch (ResponseException $e) {
+            $this->logger->warning(
+                'Warning to delete puzzle message',
+                [
+                    'messageId' => $message->chat->id,
+                    'errorCode' => $e->getCode(),
+                    'error' => $e->getMessage()
+                ]
+            );
+        }
+        try {
+            $this->botClient->deleteMessage($replyToMessage->chat->id, $replyToMessage->messageId);
+        } catch (ResponseException $e) {
+            $this->logger->warning(
+                'Warning to delete enter message',
+                [
+                    'messageId' => $replyToMessage->chat->id,
+                    'errorCode' => $e->getCode(),
+                    'error' => $e->getMessage()
+                ]
+            );
+        }
+        $chatId = $puzzleTaskDto->getChatId();
+        $userId = $puzzleTaskDto->getUserId();
+        $this->puzzleTaskService->deletePuzzleTask($chatId, $userId);
         if ($update->callbackQuery->data === $puzzleTaskDto->getAnswer()) {
-            $this->botClient->unmuteUser($puzzleTaskDto->getChatId(), $puzzleTaskDto->getUserId());
+            try {
+                $this->botClient->unmuteUser($chatId, $userId);
+            } catch (ResponseException $e) {
+                $this->logger->error(
+                    'Error to unmute new member',
+                    [
+                        'chatId' => $chatId,
+                        'userId' => $userId,
+                        'errorCode' => $e->getCode(),
+                        'error' => $e->getMessage()
+                    ]
+                );
+            }
             return;
         }
-        $this->botClient->banUser($puzzleTaskDto->getChatId(), $puzzleTaskDto->getUserId());
+        try {
+            $this->botClient->banUser($chatId, $userId);
+        } catch (ResponseException $e) {
+            $this->logger->error(
+                'Error to ban user with wrong answer',
+                [
+                    'chatId' => $chatId,
+                    'userId' => $userId,
+                    'errorCode' => $e->getCode(),
+                    'error' => $e->getMessage()
+                ]
+            );
+        }
     }
 
     /**
