@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App;
 
 use App\Dto\BotSettingsDto;
-use App\Enum\PuzzleTypeEnum;
 use App\Puzzle\PuzzleFactory;
 use SQLite3;
 use TgBotApi\BotApiBase\BotApi;
@@ -59,7 +58,6 @@ class NewMembersProcessor
             return;
         }
         $chatId = $message->chat->id;
-        $puzzleType = $this->chatSettingsService->getPuzzleType($chatId) ?? PuzzleTypeEnum::RIDDLES;
         foreach ($newChatMembers as $newChatMember) {
             if ($newChatMember->username === $botSettingsDto->getBotUserName()) {
                 $this->sendInitInformation($chatId, $botSettingsDto->getTimeOutPuzzleReply());
@@ -70,7 +68,7 @@ class NewMembersProcessor
             if (null !== $existPuzzleTaskDto) {
                 continue;
             }
-            $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleType);
+            $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzleType());
             $puzzleDto = $puzzleGenerator->generate();
             $this->puzzleTaskService->savePuzzleTask(
                 $chatId,
