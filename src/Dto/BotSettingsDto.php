@@ -8,6 +8,11 @@ class BotSettingsDto
     /**
      * @var string
      */
+    private $botApiKey;
+
+    /**
+     * @var string
+     */
     private $botUserName;
 
     /**
@@ -19,6 +24,14 @@ class BotSettingsDto
      * @var string
      */
     private $puzzleType;
+
+    /**
+     * @return string
+     */
+    public function getBotApiKey(): string
+    {
+        return $this->botApiKey;
+    }
 
     /**
      * @return string
@@ -42,6 +55,14 @@ class BotSettingsDto
     public function getPuzzleType(): string
     {
         return $this->puzzleType;
+    }
+
+    /**
+     * @param string $botApiKey
+     */
+    public function setBotApiKey(string $botApiKey): void
+    {
+        $this->botApiKey = $botApiKey;
     }
 
     /**
