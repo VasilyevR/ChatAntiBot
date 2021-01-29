@@ -10,12 +10,4 @@ class PuzzleTypeEnum
     public const SIMPLE_MATH = 'simple_math';
     public const MATH = 'math';
     public const RIDDLES = 'riddles';
-
-    public const ALL = [
-        self::FIRST_NUMBERS,
-        self::RANDOM_NUMBERS,
-        self::SIMPLE_MATH,
-        self::MATH,
-        self::RIDDLES,
-    ];
 }
