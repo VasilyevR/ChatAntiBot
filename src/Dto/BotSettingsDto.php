@@ -16,6 +16,11 @@ class BotSettingsDto
     private $timeOutPuzzleReply;
 
     /**
+     * @var string
+     */
+    private $puzzleType;
+
+    /**
      * @return string
      */
     public function getBotUserName(): string
@@ -29,6 +34,14 @@ class BotSettingsDto
     public function getTimeOutPuzzleReply(): int
     {
         return $this->timeOutPuzzleReply;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPuzzleType(): string
+    {
+        return $this->puzzleType;
     }
 
     /**
@@ -47,4 +60,11 @@ class BotSettingsDto
         $this->timeOutPuzzleReply = $timeOutPuzzleReply;
     }
 
+    /**
+     * @param string $puzzleType
+     */
+    public function setPuzzleType(string $puzzleType): void
+    {
+        $this->puzzleType = $puzzleType;
+    }
 }
