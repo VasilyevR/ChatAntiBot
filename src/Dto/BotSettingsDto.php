@@ -21,9 +21,9 @@ class BotSettingsDto
     private $timeOutPuzzleReply;
 
     /**
-     * @var string
+     * @var PuzzlesSettingsDto
      */
-    private $puzzleType;
+    private $puzzlesSettings;
 
     /**
      * @return string
@@ -50,11 +50,11 @@ class BotSettingsDto
     }
 
     /**
-     * @return string
+     * @return PuzzlesSettingsDto
      */
-    public function getPuzzleType(): string
+    public function getPuzzlesSettings(): PuzzlesSettingsDto
     {
-        return $this->puzzleType;
+        return $this->puzzlesSettings;
     }
 
     /**
@@ -82,10 +82,10 @@ class BotSettingsDto
     }
 
     /**
-     * @param string $puzzleType
+     * @param PuzzlesSettingsDto $puzzlesSettingsDto
      */
-    public function setPuzzleType(string $puzzleType): void
+    public function setPuzzlesSettings(PuzzlesSettingsDto $puzzlesSettingsDto): void
     {
-        $this->puzzleType = $puzzleType;
+        $this->puzzlesSettings = $puzzlesSettingsDto;
     }
 }

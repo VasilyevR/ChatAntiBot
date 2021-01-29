@@ -4,12 +4,30 @@ declare(strict_types=1);
 namespace App\Puzzle;
 
 use App\Dto\PuzzleDto;
+use App\Dto\PuzzleSettingsDto;
 use InvalidArgumentException;
 use NumberFormatter;
 
 abstract class AbstractPuzzleGenerator implements PuzzleGeneratorInterface
 {
-    protected const MAX_CHOICES_COUNT = 5;
+    /**
+     * @var int
+     */
+    protected $maxChoicesCount;
+
+    /**
+     * @var string[]
+     */
+    protected $settings;
+
+    /**
+     * @param PuzzleSettingsDto $puzzleSettingsDto
+     */
+    public function __construct(PuzzleSettingsDto $puzzleSettingsDto)
+    {
+        $this->maxChoicesCount = $puzzleSettingsDto->getMaxChoicesCount();
+        $this->settings = $puzzleSettingsDto->getSettings();
+    }
 
     /**
      * @return PuzzleDto
@@ -34,8 +52,9 @@ abstract class AbstractPuzzleGenerator implements PuzzleGeneratorInterface
 
     protected function getAnswers(): array
     {
+        $maxChoicesCount = $this->getMaxChoicesCount();
         $answers = [];
-        for ($i = 1; $i <= self::MAX_CHOICES_COUNT; $i++) {
+        for ($i = 1; $i <= $maxChoicesCount; $i++) {
             $answers[] = $this->generateOneAnswer();
         }
         return $answers;
@@ -53,6 +72,14 @@ abstract class AbstractPuzzleGenerator implements PuzzleGeneratorInterface
             },
             $answers
         );
+    }
+
+    /**
+     * @return int
+     */
+    protected function getMaxChoicesCount(): int
+    {
+        return $this->maxChoicesCount;
     }
 
     protected function getRandomAnswer(array $answers)

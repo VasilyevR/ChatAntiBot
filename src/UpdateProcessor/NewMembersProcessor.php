@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\UpdateProcessor;
 
+use App\Dto\BotSettingsDto;
 use App\Dto\NewMemberTelegramUpdateDto;
 use App\Dto\TelegramUpdateDtoInterface;
 use App\Exception\BotClientResponseException;
@@ -45,7 +46,7 @@ class NewMembersProcessor implements UpdateProcessorInterface
      * @inheritDoc
      * @param NewMemberTelegramUpdateDto $updateDto
      */
-    public function processUpdate(TelegramUpdateDtoInterface $updateDto, $botSettingsDto): void
+    public function processUpdate(TelegramUpdateDtoInterface $updateDto, BotSettingsDto $botSettingsDto): void
     {
         $newChatMembers = $updateDto->getNewMembers();
         if (empty($newChatMembers)) {
@@ -62,7 +63,7 @@ class NewMembersProcessor implements UpdateProcessorInterface
             if (null !== $existPuzzleTaskDto) {
                 continue;
             }
-            $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzleType());
+            $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzlesSettings());
             $puzzleDto = $puzzleGenerator->generate();
             $this->puzzleTaskService->savePuzzleTask(
                 $chatId,

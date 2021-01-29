@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Dto\BotSettingsDto;
+use App\Dto\PuzzleSettingsDto;
+use App\Dto\PuzzlesSettingsDto;
 use Noodlehaus\Config;
 use Noodlehaus\Parser\Php;
 use Psr\Log\LoggerInterface;
@@ -40,30 +42,45 @@ class BotSettingsLoader
 
         $botApiKey = $config->get('BOT_API_KEY');
         if (empty($botApiKey)) {
-            $errorMessage = 'Please create $BOT_API_KEY variable in config/parameters.php';
+            $errorMessage = 'Please create $BOT_API_KEY setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
         $timeOutPuzzleReply = $config->get('TIME_OUT_PUZZLE_REPLY');
         if (empty($botApiKey)) {
-            $errorMessage = 'Please create $TIME_OUT_PUZZLE_REPLY variable in config/parameters.php';
+            $errorMessage = 'Please create $TIME_OUT_PUZZLE_REPLY setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
-        $puzzleType = $config->get('PUZZLE_TYPE');
+        $puzzleSettings = $config->get('PUZZLE_SETTINGS');
         if (empty($botApiKey)) {
-            $errorMessage = 'Please create $PUZZLE_TYPE variable in config/parameters.php';
+            $errorMessage = 'Please create $PUZZLE_SETTINGS settings in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
+        $puzzleSettingsDto = $this->getPuzzleSettingsDto($puzzleSettings);
 
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setBotApiKey($botApiKey);
         $botSettingsDto->setTimeOutPuzzleReply($timeOutPuzzleReply);
-        $botSettingsDto->setPuzzleType($puzzleType);
+        $botSettingsDto->setPuzzlesSettings($puzzleSettingsDto);
 
         return $botSettingsDto;
+    }
+
+    /**
+     * @param string[] $puzzleSettings
+     * @return PuzzlesSettingsDto
+     */
+    private function getPuzzleSettingsDto(array $puzzleSettings): PuzzlesSettingsDto
+    {
+        $puzzleType = $puzzleSettings['PUZZLE_TYPE'];
+        $maxChoicesCount = $puzzleSettings['SETTINGS'][$puzzleType];
+        $settings = $puzzleSettings['SETTINGS'][$puzzleType];
+        $puzzleSettingsDto = new PuzzleSettingsDto($maxChoicesCount, $settings);
+
+        return new PuzzlesSettingsDto($puzzleType, $puzzleSettingsDto);
     }
 }

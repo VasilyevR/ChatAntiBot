@@ -3,13 +3,8 @@ declare(strict_types=1);
 
 namespace App\Puzzle;
 
-use Noodlehaus\Config;
-use Noodlehaus\Parser\Php;
-
 class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
 {
-    protected const MAX_CHOICES_COUNT = 4;
-
     /**
      * @param $chosenAnswer
      * @return string
@@ -27,7 +22,7 @@ class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
         $riddlesAnswers = array_keys($riddles);
         shuffle($riddlesAnswers);
 
-        return array_splice($riddlesAnswers, 0, self::MAX_CHOICES_COUNT);
+        return array_splice($riddlesAnswers, 0, $this->getMaxChoicesCount());
     }
 
     /**
@@ -49,9 +44,7 @@ class RiddlePuzzleGenerator extends AbstractPuzzleGenerator
      */
     private function getRiddles(): array
     {
-        $config = new Config('config/riddles.php', new Php());
-
-        return $config->all();
+        return $this->settings;
     }
 
     protected function generateOneAnswer()

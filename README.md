@@ -11,9 +11,8 @@ Spammer kicker Telegram Bot for checking spammer bots with questions.
 git clone https://github.com/VasilyevR/ChatAntiBot.git
 cd ChatAntiBot
 cp config/parameters_sample.php config/parameters.php
-cp config/riddles_sample.php config/riddles.php
 ```
-Edit config/parameters.php with your ***BOT_API_KEY*** and config/riddles.php with your riddles if needs.
+Edit config/parameters.php with your ***BOT_API_KEY*** and your riddles if needs.
 
 ## Build
 
