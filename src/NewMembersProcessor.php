@@ -28,11 +28,6 @@ class NewMembersProcessor
     private $puzzleTaskService;
 
     /**
-     * @var ChatSettings
-     */
-    private $chatSettingsService;
-
-    /**
      * @param BotApi $botApi
      * @param SQLite3 $database
      */
@@ -40,8 +35,6 @@ class NewMembersProcessor
     {
         $this->botApi = $botApi;
         $this->puzzleTaskService = new PuzzleTask($database);
-        $this->chatSettingsService = new ChatSettings($database);
-
     }
 
     /**
