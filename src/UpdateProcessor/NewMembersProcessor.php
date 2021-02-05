@@ -54,11 +54,11 @@ class NewMembersProcessor implements UpdateProcessorInterface
         }
         $chatId = $updateDto->getChatId();
         foreach ($newChatMembers as $newChatMember) {
-            if ($newChatMember->username === $botSettingsDto->getBotUserName()) {
+            if ($newChatMember->getUserName() === $botSettingsDto->getBotUserName()) {
                 $this->sendInitInformation($chatId, $botSettingsDto->getTimeOutPuzzleReply());
                 continue;
             }
-            $newChatMemberId = $newChatMember->id;
+            $newChatMemberId = $newChatMember->getUserId();
             $existPuzzleTaskDto = $this->puzzleTaskService->getPuzzleTask($chatId, $newChatMemberId);
             if (null !== $existPuzzleTaskDto) {
                 continue;
