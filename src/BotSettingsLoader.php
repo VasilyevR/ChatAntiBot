@@ -77,8 +77,8 @@ class BotSettingsLoader
     private function getPuzzleSettingsDto(array $puzzleSettings): PuzzlesSettingsDto
     {
         $puzzleType = $puzzleSettings['PUZZLE_TYPE'];
-        $maxChoicesCount = $puzzleSettings['SETTINGS'][$puzzleType];
-        $settings = $puzzleSettings['SETTINGS'][$puzzleType];
+        $maxChoicesCount = (int)$puzzleSettings['SETTINGS'][$puzzleType]['MAX_CHOICES_COUNT'];
+        $settings = (array)$puzzleSettings['SETTINGS'][$puzzleType]['SETTINGS'];
         $puzzleSettingsDto = new PuzzleSettingsDto($maxChoicesCount, $settings);
 
         return new PuzzlesSettingsDto($puzzleType, $puzzleSettingsDto);
