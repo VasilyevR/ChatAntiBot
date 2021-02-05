@@ -26,17 +26,24 @@ class PuzzleTaskDto
     private $userId;
 
     /**
+     * @var int
+     */
+    private $attempt;
+
+    /**
      * @param int $chatId
      * @param int $userId
      * @param string $answer
      * @param int $taskMessageId
+     * @param int $attempt
      */
-    public function __construct(int $chatId, int $userId, string $answer, int $taskMessageId)
+    public function __construct(int $chatId, int $userId, string $answer, int $taskMessageId, int $attempt)
     {
         $this->chatId = $chatId;
         $this->userId = $userId;
         $this->answer = $answer;
         $this->taskMessageId = $taskMessageId;
+        $this->attempt = $attempt;
     }
 
     /**
@@ -69,5 +76,13 @@ class PuzzleTaskDto
     public function getTaskMessageId(): int
     {
         return $this->taskMessageId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttempt(): int
+    {
+        return $this->attempt;
     }
 }

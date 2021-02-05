@@ -18,7 +18,12 @@ class BotSettingsDto
     /**
      * @var int
      */
-    private $timeOutPuzzleReply;
+    private $puzzleReplyTimeOut;
+
+    /**
+     * @var int
+     */
+    private $puzzleReplyAttemptCount;
 
     /**
      * @var PuzzlesSettingsDto
@@ -44,9 +49,17 @@ class BotSettingsDto
     /**
      * @return int
      */
-    public function getTimeOutPuzzleReply(): int
+    public function getPuzzleReplyTimeOut(): int
     {
-        return $this->timeOutPuzzleReply;
+        return $this->puzzleReplyTimeOut;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPuzzleReplyAttemptCount(): int
+    {
+        return $this->puzzleReplyAttemptCount;
     }
 
     /**
@@ -74,11 +87,19 @@ class BotSettingsDto
     }
 
     /**
-     * @param int $timeOutPuzzleReply
+     * @param int $puzzleReplyTimeOut
      */
-    public function setTimeOutPuzzleReply(int $timeOutPuzzleReply): void
+    public function setPuzzleReplyTimeOut(int $puzzleReplyTimeOut): void
     {
-        $this->timeOutPuzzleReply = $timeOutPuzzleReply;
+        $this->puzzleReplyTimeOut = $puzzleReplyTimeOut;
+    }
+
+    /**
+     * @param int $puzzleReplyAttemptCount
+     */
+    public function setPuzzleReplyAttemptCount(int $puzzleReplyAttemptCount): void
+    {
+        $this->puzzleReplyAttemptCount = $puzzleReplyAttemptCount;
     }
 
     /**
