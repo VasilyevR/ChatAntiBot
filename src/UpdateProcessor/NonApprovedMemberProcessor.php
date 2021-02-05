@@ -21,6 +21,7 @@ class NonApprovedMemberProcessor
      * @var PuzzleTask
      */
     private $puzzleTaskService;
+
     /**
      * @var LoggerInterface
      */
@@ -43,7 +44,7 @@ class NonApprovedMemberProcessor
      */
     public function banNonApprovedMembers(BotSettingsDto $botSettingsDto): void
     {
-        $nonApprovedUsers = $this->puzzleTaskService->getNonApprovedUsers($botSettingsDto->getTimeOutPuzzleReply());
+        $nonApprovedUsers = $this->puzzleTaskService->getNonApprovedUsers($botSettingsDto->getPuzzleReplyTimeOut());
 
         foreach ($nonApprovedUsers as $taskUserDto) {
             $chatId = $taskUserDto->getChatId();

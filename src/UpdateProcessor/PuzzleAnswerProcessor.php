@@ -5,8 +5,10 @@ namespace App\UpdateProcessor;
 
 use App\Dto\BotSettingsDto;
 use App\Dto\PuzzleAnswerTelegramUpdateDto;
+use App\Dto\PuzzleTaskDto;
 use App\Dto\TelegramUpdateDtoInterface;
 use App\Exception\BotClientResponseException;
+use App\Puzzle\PuzzleFactory;
 use App\PuzzleTask;
 use App\TelegramBotClient;
 use Psr\Log\LoggerInterface;
@@ -23,6 +25,7 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
      * @var PuzzleTask
      */
     private $puzzleTaskService;
+
     /**
      * @var LoggerInterface
      */
@@ -54,29 +57,8 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
         if (null === $puzzleTaskDto) {
             return;
         }
-        try {
-            $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getPuzzleMessageId());
-        } catch (BotClientResponseException $exception) {
-            $this->logger->warning(
-                'Warning to delete puzzle message',
-                [
-                    'messageId' => $updateDto->getChatId(),
-                    'errorCode' => $exception->getCode(),
-                    'error' => $exception->getMessage()
-                ]
-            );
-        }
-        try {
-            $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getEnterMessageId());
-        } catch (BotClientResponseException $exception) {
-            $this->logger->warning(
-                'Warning to delete enter message',
-                [
-                    'messageId' => $updateDto->getChatId(),
-                    'errorCode' => $exception->getCode(),
-                    'error' => $exception->getMessage()
-                ]
-            );
+        if ($updateDto->getEnterMessageId() !== $puzzleTaskDto->getTaskMessageId()) {
+            return;
         }
         $chatId = $puzzleTaskDto->getChatId();
         $userId = $puzzleTaskDto->getUserId();
@@ -95,6 +77,13 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                     ]
                 );
             }
+            $this->deletePuzzleMessage($updateDto);
+            $this->deleteEnterMessage($updateDto);
+            return;
+        }
+        if ($puzzleTaskDto->getAttempt() < $botSettingsDto->getPuzzleReplyAttemptCount()) {
+            $this->deletePuzzleMessage($updateDto);
+            $this->resendPuzzleMessage($puzzleTaskDto, $botSettingsDto);
             return;
         }
         try {
@@ -105,6 +94,82 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                 [
                     'chatId' => $chatId,
                     'userId' => $userId,
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+        $this->deletePuzzleMessage($updateDto);
+        $this->deleteEnterMessage($updateDto);
+    }
+
+    /**
+     * @param $updateDto
+     */
+    private function deletePuzzleMessage($updateDto): void
+    {
+        try {
+            $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getPuzzleMessageId());
+        } catch (BotClientResponseException $exception) {
+            $this->logger->warning(
+                'Warning to delete puzzle message',
+                [
+                    'messageId' => $updateDto->getChatId(),
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param $updateDto
+     */
+    private function deleteEnterMessage($updateDto): void
+    {
+        try {
+            $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getEnterMessageId());
+        } catch (BotClientResponseException $exception) {
+            $this->logger->warning(
+                'Warning to delete enter message',
+                [
+                    'messageId' => $updateDto->getChatId(),
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param PuzzleTaskDto $puzzleTaskDto
+     * @param BotSettingsDto $botSettingsDto
+     */
+    private function resendPuzzleMessage(PuzzleTaskDto $puzzleTaskDto, BotSettingsDto $botSettingsDto): void
+    {
+        $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzlesSettings());
+        $puzzleDto = $puzzleGenerator->generate();
+        $this->puzzleTaskService->savePuzzleTask(
+            $puzzleTaskDto->getChatId(),
+            $puzzleTaskDto->getUserId(),
+            $puzzleDto->getAnswer(),
+            $puzzleTaskDto->getTaskMessageId(),
+            $puzzleTaskDto->getAttempt() + 1
+        );
+        $question = 'Неверный ответ. Попытайтесь еще раз. ' . $puzzleDto->getQuestion();
+        try {
+            $this->botClient->sendKeyboardMarkupMessage(
+                $puzzleTaskDto->getChatId(),
+                $puzzleTaskDto->getTaskMessageId(),
+                $question,
+                $puzzleDto->getChoices()
+            );
+        } catch (BotClientResponseException $exception) {
+            $this->logger->error(
+                'Error to send puzzle',
+                [
+                    'chatId' => $puzzleTaskDto->getChatId(),
+                    'messageId' => $puzzleTaskDto->getTaskMessageId(),
                     'errorCode' => $exception->getCode(),
                     'error' => $exception->getMessage()
                 ]
