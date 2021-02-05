@@ -2,7 +2,8 @@
 
 return [
     'BOT_API_KEY' => '',
-    'TIME_OUT_PUZZLE_REPLY' => 2,
+    'PUZZLE_REPLY_TIME_OUT' => 2,
+    'PUZZLE_REPLY_ATTEMPT_COUNT' => 1,
     'PUZZLE_SETTINGS' => [
         'PUZZLE_TYPE' => 'riddles',
         'SETTINGS' => [
