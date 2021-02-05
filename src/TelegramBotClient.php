@@ -184,11 +184,11 @@ class TelegramBotClient
     {
         $updateResultsDtos = [];
         foreach ($updates as $update) {
-            if (null !== $update->message && !empty($update->message->newChatMembers)) {
+            if ($this->isCorrectNewMemberUpdate($update)) {
                 $updateResultsDtos[] = $this->getNewMemberUpdateDto($update);
                 continue;
             }
-            if (null !== $update->callbackQuery->data && $this->isCorrectPuzzleAnswerUpdate($update)) {
+            if ($this->isCorrectPuzzleAnswerUpdate($update)) {
                 $updateResultsDtos[] = $this->getPuzzleAnswerUpdateDto($update);
             }
         }
@@ -260,5 +260,16 @@ class TelegramBotClient
             return false;
         }
         return !(null === $replyToMessage || null === $replyToMessage->from);
+    }
+
+    /**
+     * @param UpdateType $update
+     * @return bool
+     */
+    private function isCorrectNewMemberUpdate(UpdateType $update): bool
+    {
+        return null !== $update->message
+            && !empty($update->message->newChatMembers
+                && !empty($update->message->chat->id));
     }
 }
