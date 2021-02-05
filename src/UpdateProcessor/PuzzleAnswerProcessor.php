@@ -47,7 +47,7 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
     public function processUpdate(TelegramUpdateDtoInterface $updateDto, BotSettingsDto $botSettingsDto): void
     {
         $userDto = $updateDto->getUser();
-        if ($botSettingsDto->getBotUserName() !== $userDto->getUserName()) {
+        if ($botSettingsDto->getBotUserName() === $userDto->getUserName()) {
             return;
         }
         $puzzleTaskDto = $this->puzzleTaskService->getPuzzleTask($updateDto->getChatId(), $userDto->getUserId());
