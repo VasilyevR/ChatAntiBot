@@ -47,9 +47,16 @@ class BotSettingsLoader
             throw new RuntimeException($errorMessage);
         }
 
-        $timeOutPuzzleReply = $config->get('TIME_OUT_PUZZLE_REPLY');
+        $puzzleReplyTimeOut = $config->get('PUZZLE_REPLY_TIME_OUT');
         if (empty($botApiKey)) {
-            $errorMessage = 'Please create $TIME_OUT_PUZZLE_REPLY setting in config/parameters.php';
+            $errorMessage = 'Please create $PUZZLE_REPLY_TIME_OUT setting in config/parameters.php';
+            $this->logger->critical($errorMessage);
+            throw new RuntimeException($errorMessage);
+        }
+
+        $puzzleReplyAttemptCount = $config->get('PUZZLE_REPLY_ATTEMPT_COUNT');
+        if (empty($botApiKey)) {
+            $errorMessage = 'Please create $PUZZLE_REPLY_ATTEMPT_COUNT setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
@@ -64,7 +71,8 @@ class BotSettingsLoader
 
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setBotApiKey($botApiKey);
-        $botSettingsDto->setTimeOutPuzzleReply($timeOutPuzzleReply);
+        $botSettingsDto->setPuzzleReplyTimeOut($puzzleReplyTimeOut);
+        $botSettingsDto->setPuzzleReplyAttemptCount($puzzleReplyAttemptCount);
         $botSettingsDto->setPuzzlesSettings($puzzleSettingsDto);
 
         return $botSettingsDto;

@@ -28,7 +28,7 @@ class PuzzleTask
     {
         $results = $this->database->query(
             sprintf(
-                'SELECT answer, message_id FROM puzzle_task WHERE chat_id = %d AND user_id = %d',
+                'SELECT answer, message_id, attempt FROM puzzle_task WHERE chat_id = %d AND user_id = %d',
                 $chatId,
                 $userId
             )
@@ -44,7 +44,7 @@ class PuzzleTask
             return null;
         }
 
-        return new PuzzleTaskDto($chatId, $userId, (string)$row['answer'], $row['message_id']);
+        return new PuzzleTaskDto($chatId, $userId, (string)$row['answer'], $row['message_id'], $row['attempt']);
     }
 
     /**
@@ -52,19 +52,21 @@ class PuzzleTask
      * @param int $userId
      * @param string $answer
      * @param int $messageId
+     * @param int $attempt
      * @return void
      */
-    public function savePuzzleTask(int $chatId, int $userId, string $answer, int $messageId): void
+    public function savePuzzleTask(int $chatId, int $userId, string $answer, int $messageId, int $attempt = 0): void
     {
         $this->database->query(
             sprintf(
                 "INSERT OR REPLACE INTO puzzle_task
-    (chat_id, user_id, answer, message_id, date_time)
-     VALUES (%d, %d, '%s', %d, CURRENT_TIMESTAMP)",
+    (chat_id, user_id, answer, message_id, attempt, date_time)
+     VALUES (%d, %d, '%s', %d, %d, CURRENT_TIMESTAMP)",
                 $chatId,
                 $userId,
                 $answer,
-                $messageId
+                $messageId,
+                $attempt
             )
         );
     }
