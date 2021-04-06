@@ -1,0 +1,17 @@
+name: codacy-coverage-reporter
+
+on: ["push"]
+
+jobs:
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    name: codacy-coverage-reporter
+    steps:
+      - uses: actions/checkout@master
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          # Project token for the Codacy project you want to send coverage information
+          project-token: ${{ secrets.CODACY_PROJECT_API_TOKEN }}
+          # Optional comma separated list of coverage reports to send to Codacy
+          coverage-reports: clover.xml # optional, default is 
