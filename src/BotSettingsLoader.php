@@ -7,16 +7,15 @@ use App\Dto\BotSettingsDto;
 use App\Dto\PuzzleSettingsDto;
 use App\Dto\PuzzlesSettingsDto;
 use Noodlehaus\Config;
-use Noodlehaus\Parser\Php;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class BotSettingsLoader
 {
     /**
-     * @var string
+     * @var Config
      */
-    private $configFilePath;
+    private $config;
 
     /**
      * @var LoggerInterface
@@ -24,12 +23,12 @@ class BotSettingsLoader
     private $logger;
 
     /**
-     * @param string $configFilePath
+     * @param Config $config
      * @param LoggerInterface $logger
      */
-    public function __construct(string $configFilePath, LoggerInterface $logger)
+    public function __construct(Config $config, LoggerInterface $logger)
     {
-        $this->configFilePath = $configFilePath;
+        $this->config = $config;
         $this->logger = $logger;
     }
 
@@ -38,31 +37,29 @@ class BotSettingsLoader
      */
     public function getBotSettings(): BotSettingsDto
     {
-        $config = new Config($this->configFilePath, new Php());
-
-        $botApiKey = $config->get('BOT_API_KEY');
+        $botApiKey = $this->config->get('BOT_API_KEY');
         if (empty($botApiKey)) {
             $errorMessage = 'Please create $BOT_API_KEY setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
-        $puzzleReplyTimeOut = $config->get('PUZZLE_REPLY_TIME_OUT');
-        if (empty($botApiKey)) {
+        $puzzleReplyTimeOut = $this->config->get('PUZZLE_REPLY_TIME_OUT');
+        if (empty($puzzleReplyTimeOut)) {
             $errorMessage = 'Please create $PUZZLE_REPLY_TIME_OUT setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
-        $puzzleReplyAttemptCount = $config->get('PUZZLE_REPLY_ATTEMPT_COUNT');
-        if (empty($botApiKey)) {
+        $puzzleReplyAttemptCount = $this->config->get('PUZZLE_REPLY_ATTEMPT_COUNT');
+        if (empty($puzzleReplyAttemptCount)) {
             $errorMessage = 'Please create $PUZZLE_REPLY_ATTEMPT_COUNT setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
-        $puzzleSettings = $config->get('PUZZLE_SETTINGS');
-        if (empty($botApiKey)) {
+        $puzzleSettings = $this->config->get('PUZZLE_SETTINGS');
+        if (empty($puzzleSettings)) {
             $errorMessage = 'Please create $PUZZLE_SETTINGS settings in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
