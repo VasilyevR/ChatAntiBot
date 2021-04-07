@@ -13,6 +13,8 @@ class BotSettingsDtoTest extends TestCase
     private const PUZZLE_REPLY_TIME_OUT = 'PUZZLE_REPLY_TIME_OUT';
     private const PUZZLE_REPLY_ATTEMPT_COUNT = 'PUZZLE_REPLY_ATTEMPT_COUNT';
     private const USER_NAME = 'USER_NAME';
+    private const WELCOME_MESSAGE = 'WELCOME_MESSAGE';
+    private const INTRO_MESSAGE = 'INTRO_MESSAGE';
 
     /**
      * @covers \App\Dto\BotSettingsDto::setBotApiKey
@@ -65,6 +67,34 @@ class BotSettingsDtoTest extends TestCase
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setPuzzleReplyAttemptCount($puzzleReplyAttemptCount);
         self::assertEquals($puzzleReplyAttemptCount, $botSettingsDto->getPuzzleReplyAttemptCount());
+    }
+
+    /**
+     * @covers \App\Dto\BotSettingsDto::setWelcomeMessage
+     * @covers \App\Dto\BotSettingsDto::getWelcomeMessage
+     * @dataProvider Tests\DataProviders\GoodConfigProvider::getGoodConfig()
+     */
+    public function testSetGetWelcomeMessage(array $goodConfig): void
+    {
+        $welcomeMessage = $goodConfig[self::WELCOME_MESSAGE];
+
+        $botSettingsDto = new BotSettingsDto();
+        $botSettingsDto->setWelcomeMessage($welcomeMessage);
+        $this->assertEquals($welcomeMessage, $botSettingsDto->getWelcomeMessage());
+    }
+
+    /**
+     * @covers \App\Dto\BotSettingsDto::setIntroMessage
+     * @covers \App\Dto\BotSettingsDto::getIntroMessage
+     * @dataProvider Tests\DataProviders\GoodConfigProvider::getGoodConfig()
+     */
+    public function testSetGetIntroMessage(array $goodConfig): void
+    {
+        $introMessage = $goodConfig[self::INTRO_MESSAGE];
+
+        $botSettingsDto = new BotSettingsDto();
+        $botSettingsDto->setIntroMessage($introMessage);
+        $this->assertEquals($introMessage, $botSettingsDto->getIntroMessage());
     }
 
     /**
