@@ -9,7 +9,7 @@ class GoodConfigProvider
         'BOT_API_KEY' => 'SOME_KEY',
         'PUZZLE_REPLY_TIME_OUT' => 2,
         'PUZZLE_REPLY_ATTEMPT_COUNT' => 1,
-        'WELCOME_MESSAGE' => 'Добро пожаловать в чат!
+        'WELCOME_MESSAGE' => 'Добро пожаловать %s в чат!
 Расскажите немного о себе. Будьте вежливы и соблюдайте правила чата.',
         'INTRO_MESSAGE' => 'Здравствуйте! Я бот!
 Я умею задавать входящим пользователям простые вопросы.
