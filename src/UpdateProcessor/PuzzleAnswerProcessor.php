@@ -79,7 +79,7 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
             }
             $this->deletePuzzleMessage($updateDto);
             $this->deleteEnterMessage($updateDto);
-            $this->sendWelcomeMessage($updateDto->getChatId(), $botSettingsDto->getWelcomeMessage());
+            $this->sendWelcomeMessage($updateDto, $botSettingsDto->getWelcomeMessage());
             return;
         }
         if ($puzzleTaskDto->getAttempt() < $botSettingsDto->getPuzzleReplyAttemptCount()) {
@@ -105,9 +105,9 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
     }
 
     /**
-     * @param $updateDto
+     * @param PuzzleAnswerTelegramUpdateDto $updateDto
      */
-    private function deletePuzzleMessage($updateDto): void
+    private function deletePuzzleMessage(PuzzleAnswerTelegramUpdateDto $updateDto): void
     {
         try {
             $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getPuzzleMessageId());
@@ -124,9 +124,9 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
     }
 
     /**
-     * @param $updateDto
+     * @param PuzzleAnswerTelegramUpdateDto $updateDto
      */
-    private function deleteEnterMessage($updateDto): void
+    private function deleteEnterMessage(PuzzleAnswerTelegramUpdateDto $updateDto): void
     {
         try {
             $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getEnterMessageId());
@@ -179,13 +179,15 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
     }
 
     /**
-     * @param int $chatId
+     * @param PuzzleAnswerTelegramUpdateDto $updateDto
      * @param string $welcomeMessage
      */
-    private function sendWelcomeMessage(int $chatId, string $welcomeMessage): void
+    private function sendWelcomeMessage(PuzzleAnswerTelegramUpdateDto $updateDto, string $welcomeMessage): void
     {
+        $chatId = $updateDto->getChatId();
+        $text = sprintf($welcomeMessage, $updateDto->getUser()->getUserName());
         try {
-            $this->botClient->sendChatMessage($chatId, $welcomeMessage);
+            $this->botClient->sendChatMessage($chatId, $text);
         } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to send welcome message',
