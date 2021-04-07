@@ -39,37 +39,54 @@ class BotSettingsLoader
     {
         $botApiKey = $this->config->get('BOT_API_KEY');
         if (empty($botApiKey)) {
-            $errorMessage = 'Please create $BOT_API_KEY setting in config/parameters.php';
+            $errorMessage = 'Please create BOT_API_KEY setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
         $puzzleReplyTimeOut = $this->config->get('PUZZLE_REPLY_TIME_OUT');
         if (empty($puzzleReplyTimeOut)) {
-            $errorMessage = 'Please create $PUZZLE_REPLY_TIME_OUT setting in config/parameters.php';
+            $errorMessage = 'Please create PUZZLE_REPLY_TIME_OUT setting in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
         $puzzleReplyAttemptCount = $this->config->get('PUZZLE_REPLY_ATTEMPT_COUNT');
         if (empty($puzzleReplyAttemptCount)) {
-            $errorMessage = 'Please create $PUZZLE_REPLY_ATTEMPT_COUNT setting in config/parameters.php';
+            $errorMessage = 'Please create PUZZLE_REPLY_ATTEMPT_COUNT setting in config/parameters.php';
+            $this->logger->critical($errorMessage);
+            throw new RuntimeException($errorMessage);
+        }
+
+        $welcomeMessage = $this->config->get('WELCOME_MESSAGE');
+        if (empty($welcomeMessage)) {
+            $errorMessage = 'Please create WELCOME_MESSAGE settings in config/parameters.php';
+            $this->logger->critical($errorMessage);
+            throw new RuntimeException($errorMessage);
+        }
+
+        $introMessage = $this->config->get('INTRO_MESSAGE');
+        if (empty($introMessage)) {
+            $errorMessage = 'Please create INTRO_MESSAGE settings in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
 
         $puzzleSettings = $this->config->get('PUZZLE_SETTINGS');
         if (empty($puzzleSettings)) {
-            $errorMessage = 'Please create $PUZZLE_SETTINGS settings in config/parameters.php';
+            $errorMessage = 'Please create PUZZLE_SETTINGS settings in config/parameters.php';
             $this->logger->critical($errorMessage);
             throw new RuntimeException($errorMessage);
         }
+
         $puzzleSettingsDto = $this->getPuzzleSettingsDto($puzzleSettings);
 
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setBotApiKey($botApiKey);
         $botSettingsDto->setPuzzleReplyTimeOut($puzzleReplyTimeOut);
         $botSettingsDto->setPuzzleReplyAttemptCount($puzzleReplyAttemptCount);
+        $botSettingsDto->setWelcomeMessage($welcomeMessage);
+        $botSettingsDto->setIntroMessage($introMessage);
         $botSettingsDto->setPuzzlesSettings($puzzleSettingsDto);
 
         return $botSettingsDto;
