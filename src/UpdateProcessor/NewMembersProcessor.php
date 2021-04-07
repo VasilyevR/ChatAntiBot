@@ -55,7 +55,11 @@ class NewMembersProcessor implements UpdateProcessorInterface
         $chatId = $updateDto->getChatId();
         foreach ($newChatMembers as $newChatMember) {
             if ($newChatMember->getUserName() === $botSettingsDto->getBotUserName()) {
-                $this->sendInitInformation($chatId, $botSettingsDto->getPuzzleReplyTimeOut());
+                $this->sendIntroMessage(
+                    $chatId,
+                    $botSettingsDto->getIntroMessage(),
+                $botSettingsDto->getPuzzleReplyTimeOut()
+                );
                 continue;
             }
             $newChatMemberId = $newChatMember->getUserId();
@@ -108,17 +112,12 @@ class NewMembersProcessor implements UpdateProcessorInterface
 
     /**
      * @param int $chatId
+     * @param string $introMessage
      * @param int $timeOut
      */
-    private function sendInitInformation(int $chatId, int $timeOut): void
+    private function sendIntroMessage(int $chatId, string $introMessage, int $timeOut): void
     {
-        $information = 'Здравствуйте! Я бот!
-Я умею задавать входящим пользователям простые вопросы.
-Тот кто не ответил на них правильно в течение %d минут вероятней всего бот.
-Либо просто не захотел или не успел ответить.
-Он будет удален мной из этого чата, но может быть добавлен любым админом.
-Не забудьте меня сделать админом этого чата!';
-        $text = sprintf($information, $timeOut);
+        $text = sprintf($introMessage, $timeOut);
         try {
             $this->botClient->sendChatMessage($chatId, $text);
         } catch (BotClientResponseException $exception) {

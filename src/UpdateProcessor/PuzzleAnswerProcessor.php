@@ -79,6 +79,7 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
             }
             $this->deletePuzzleMessage($updateDto);
             $this->deleteEnterMessage($updateDto);
+            $this->sendWelcomeMessage($updateDto->getChatId(), $botSettingsDto->getWelcomeMessage());
             return;
         }
         if ($puzzleTaskDto->getAttempt() < $botSettingsDto->getPuzzleReplyAttemptCount()) {
@@ -170,6 +171,26 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                 [
                     'chatId' => $puzzleTaskDto->getChatId(),
                     'messageId' => $puzzleTaskDto->getTaskMessageId(),
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param int $chatId
+     * @param string $welcomeMessage
+     */
+    private function sendWelcomeMessage(int $chatId, string $welcomeMessage): void
+    {
+        try {
+            $this->botClient->sendChatMessage($chatId, $welcomeMessage);
+        } catch (BotClientResponseException $exception) {
+            $this->logger->warning(
+                'Warning to send welcome message',
+                [
+                    'chatId' => $chatId,
                     'errorCode' => $exception->getCode(),
                     'error' => $exception->getMessage()
                 ]
