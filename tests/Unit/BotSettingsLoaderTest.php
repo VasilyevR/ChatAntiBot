@@ -19,6 +19,8 @@ class BotSettingsLoaderTest extends TestCase
     private const PUZZLE_REPLY_TIME_OUT = 'PUZZLE_REPLY_TIME_OUT';
     private const PUZZLE_REPLY_ATTEMPT_COUNT = 'PUZZLE_REPLY_ATTEMPT_COUNT';
     private const PUZZLE_SETTINGS = 'PUZZLE_SETTINGS';
+    private const WELCOME_MESSAGE = 'WELCOME_MESSAGE';
+    private const INTRO_MESSAGE = 'INTRO_MESSAGE';
 
     /**
      * @covers \App\BotSettingsLoader::__construct
@@ -27,6 +29,8 @@ class BotSettingsLoaderTest extends TestCase
      * @covers \App\Dto\BotSettingsDto::setBotApiKey
      * @covers \App\Dto\BotSettingsDto::setPuzzleReplyAttemptCount
      * @covers \App\Dto\BotSettingsDto::setPuzzleReplyTimeOut
+     * @covers \App\Dto\BotSettingsDto::setIntroMessage
+     * @covers \App\Dto\BotSettingsDto::setWelcomeMessage
      * @covers \App\Dto\BotSettingsDto::setPuzzlesSettings
      * @covers \App\Dto\PuzzleSettingsDto::__construct
      * @covers \App\Dto\PuzzlesSettingsDto::__construct
@@ -36,13 +40,15 @@ class BotSettingsLoaderTest extends TestCase
     {
         $config = $this->getMockConfig();
 
-        $config->expects($this->exactly(4))
+        $config->expects($this->exactly(6))
             ->method('get')
             ->willReturnMap(
                 [
                     [self::BOT_API_KEY, null, $goodConfig[self::BOT_API_KEY]],
                     [self::PUZZLE_REPLY_TIME_OUT, null, $goodConfig[self::PUZZLE_REPLY_TIME_OUT]],
                     [self::PUZZLE_REPLY_ATTEMPT_COUNT, null, $goodConfig[self::PUZZLE_REPLY_ATTEMPT_COUNT]],
+                    [self::WELCOME_MESSAGE, null, $goodConfig[self::WELCOME_MESSAGE]],
+                    [self::INTRO_MESSAGE, null, $goodConfig[self::INTRO_MESSAGE]],
                     [self::PUZZLE_SETTINGS, null, $goodConfig[self::PUZZLE_SETTINGS]]
                 ]
             );
@@ -129,17 +135,72 @@ class BotSettingsLoaderTest extends TestCase
      * @covers \App\BotSettingsLoader::getBotSettings
      * @dataProvider Tests\DataProviders\GoodConfigProvider::getGoodConfig()
      */
-    public function testGetBotSettingsWithoutPuzzleSettings(array $goodConfig): void
+    public function testGetBotSettingsWithoutWelcomeMessage(array $goodConfig): void
     {
         $config = $this->getMockConfig();
 
-        $config->expects($this->exactly(4))
+        $config->expects(self::exactly(4))
             ->method('get')
             ->willReturnMap(
                 [
                     [self::BOT_API_KEY, null, $goodConfig[self::BOT_API_KEY]],
                     [self::PUZZLE_REPLY_TIME_OUT, null, $goodConfig[self::PUZZLE_REPLY_TIME_OUT]],
                     [self::PUZZLE_REPLY_ATTEMPT_COUNT, null, $goodConfig[self::PUZZLE_REPLY_ATTEMPT_COUNT]],
+                    [self::WELCOME_MESSAGE, null, null],
+                ]
+            );
+
+        $this->expectException(RuntimeException::class);
+        $logger = $this->getMockLogger();
+        $botSettingsLoader = new BotSettingsLoader($config, $logger);
+        $botSettingsLoader->getBotSettings();
+    }
+
+    /**
+     * @covers \App\BotSettingsLoader::__construct
+     * @covers \App\BotSettingsLoader::getBotSettings
+     * @dataProvider Tests\DataProviders\GoodConfigProvider::getGoodConfig()
+     */
+    public function testGetBotSettingsWithoutIntroMessage(array $goodConfig): void
+    {
+        $config = $this->getMockConfig();
+
+        $config->expects(self::exactly(5))
+            ->method('get')
+            ->willReturnMap(
+                [
+                    [self::BOT_API_KEY, null, $goodConfig[self::BOT_API_KEY]],
+                    [self::PUZZLE_REPLY_TIME_OUT, null, $goodConfig[self::PUZZLE_REPLY_TIME_OUT]],
+                    [self::PUZZLE_REPLY_ATTEMPT_COUNT, null, $goodConfig[self::PUZZLE_REPLY_ATTEMPT_COUNT]],
+                    [self::WELCOME_MESSAGE, null, $goodConfig[self::WELCOME_MESSAGE]],
+                    [self::INTRO_MESSAGE, null, null],
+                ]
+            );
+
+        $this->expectException(RuntimeException::class);
+        $logger = $this->getMockLogger();
+        $botSettingsLoader = new BotSettingsLoader($config, $logger);
+        $botSettingsLoader->getBotSettings();
+    }
+
+    /**
+     * @covers \App\BotSettingsLoader::__construct
+     * @covers \App\BotSettingsLoader::getBotSettings
+     * @dataProvider Tests\DataProviders\GoodConfigProvider::getGoodConfig()
+     */
+    public function testGetBotSettingsWithoutPuzzleSettings(array $goodConfig): void
+    {
+        $config = $this->getMockConfig();
+
+        $config->expects($this->exactly(6))
+            ->method('get')
+            ->willReturnMap(
+                [
+                    [self::BOT_API_KEY, null, $goodConfig[self::BOT_API_KEY]],
+                    [self::PUZZLE_REPLY_TIME_OUT, null, $goodConfig[self::PUZZLE_REPLY_TIME_OUT]],
+                    [self::PUZZLE_REPLY_ATTEMPT_COUNT, null, $goodConfig[self::PUZZLE_REPLY_ATTEMPT_COUNT]],
+                    [self::WELCOME_MESSAGE, null, $goodConfig[self::WELCOME_MESSAGE]],
+                    [self::INTRO_MESSAGE, null, $goodConfig[self::INTRO_MESSAGE]],
                     [self::PUZZLE_SETTINGS, null, null]
                 ]
             );
