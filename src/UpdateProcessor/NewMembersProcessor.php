@@ -69,14 +69,8 @@ class NewMembersProcessor implements UpdateProcessorInterface
             }
             $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzlesSettings());
             $puzzleDto = $puzzleGenerator->generate();
-            $this->puzzleTaskService->savePuzzleTask(
-                $chatId,
-                $newChatMemberId,
-                $puzzleDto->getAnswer(),
-                $updateDto->getMessageId()
-            );
             try {
-                $this->botClient->sendKeyboardMarkupMessage(
+                $messageSent = $this->botClient->sendKeyboardMarkupMessage(
                     $chatId,
                     $updateDto->getMessageId(),
                     $puzzleDto->getQuestion(),
@@ -94,6 +88,13 @@ class NewMembersProcessor implements UpdateProcessorInterface
                 );
                 continue;
             }
+            $this->puzzleTaskService->savePuzzleTask(
+                $chatId,
+                $newChatMemberId,
+                $puzzleDto->getAnswer(),
+                $updateDto->getMessageId(),
+                $messageSent->messageId
+            );
             try {
                 $this->botClient->muteUser($chatId, $newChatMemberId);
             } catch (BotClientResponseException $exception) {

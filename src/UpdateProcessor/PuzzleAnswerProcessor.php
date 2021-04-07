@@ -150,16 +150,9 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
     {
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($botSettingsDto->getPuzzlesSettings());
         $puzzleDto = $puzzleGenerator->generate();
-        $this->puzzleTaskService->savePuzzleTask(
-            $puzzleTaskDto->getChatId(),
-            $puzzleTaskDto->getUserId(),
-            $puzzleDto->getAnswer(),
-            $puzzleTaskDto->getTaskMessageId(),
-            $puzzleTaskDto->getAttempt() + 1
-        );
         $question = 'Неверный ответ. Попытайтесь еще раз. ' . $puzzleDto->getQuestion();
         try {
-            $this->botClient->sendKeyboardMarkupMessage(
+            $messageSent = $this->botClient->sendKeyboardMarkupMessage(
                 $puzzleTaskDto->getChatId(),
                 $puzzleTaskDto->getTaskMessageId(),
                 $question,
@@ -175,7 +168,16 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                     'error' => $exception->getMessage()
                 ]
             );
+            return;
         }
+        $this->puzzleTaskService->savePuzzleTask(
+            $puzzleTaskDto->getChatId(),
+            $puzzleTaskDto->getUserId(),
+            $puzzleDto->getAnswer(),
+            $puzzleTaskDto->getTaskMessageId(),
+            $messageSent->messageId,
+            $puzzleTaskDto->getAttempt() + 1
+        );
     }
 
     /**
