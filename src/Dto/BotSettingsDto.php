@@ -31,6 +31,16 @@ class BotSettingsDto
     private $puzzlesSettings;
 
     /**
+     * @var string
+     */
+    private $welcomeMessage;
+
+    /**
+     * @var string
+     */
+    private $introMessage;
+
+    /**
      * @return string
      */
     public function getBotApiKey(): string
@@ -60,6 +70,22 @@ class BotSettingsDto
     public function getPuzzleReplyAttemptCount(): int
     {
         return $this->puzzleReplyAttemptCount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWelcomeMessage(): string
+    {
+        return $this->welcomeMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntroMessage(): string
+    {
+        return $this->introMessage;
     }
 
     /**
@@ -100,6 +126,22 @@ class BotSettingsDto
     public function setPuzzleReplyAttemptCount(int $puzzleReplyAttemptCount): void
     {
         $this->puzzleReplyAttemptCount = $puzzleReplyAttemptCount;
+    }
+
+    /**
+     * @param string $welcomeMessage
+     */
+    public function setWelcomeMessage(string $welcomeMessage): void
+    {
+        $this->welcomeMessage = $welcomeMessage;
+    }
+
+    /**
+     * @param string $introMessage
+     */
+    public function setIntroMessage(string $introMessage): void
+    {
+        $this->introMessage = $introMessage;
     }
 
     /**
