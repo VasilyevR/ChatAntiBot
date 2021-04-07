@@ -18,6 +18,7 @@ use TgBotApi\BotApiBase\Method\RestrictChatMemberMethod;
 use TgBotApi\BotApiBase\Method\SendMessageMethod;
 use TgBotApi\BotApiBase\Type\InlineKeyboardButtonType;
 use TgBotApi\BotApiBase\Type\InlineKeyboardMarkupType;
+use TgBotApi\BotApiBase\Type\MessageType;
 use TgBotApi\BotApiBase\Type\UpdateType;
 use TgBotApi\BotApiBase\Type\UserType;
 
@@ -70,9 +71,10 @@ class TelegramBotClient
      * @param int $messageId
      * @param string $text
      * @param array $choices
+     * @return MessageType
      * @throws BotClientResponseException
      */
-    public function sendKeyboardMarkupMessage(int $chatId, int $messageId, string $text, array $choices): void
+    public function sendKeyboardMarkupMessage(int $chatId, int $messageId, string $text, array $choices): MessageType
     {
         $keyboardButtons = [];
         foreach ($choices as $choice) {
@@ -89,7 +91,7 @@ class TelegramBotClient
         $sendMessageMethod->replyToMessageId = $messageId;
         $sendMessageMethod->parseMode = 'Markdown';
         try {
-            $this->botApi->send($sendMessageMethod);
+            return $this->botApi->send($sendMessageMethod);
         } catch (ResponseException $exception) {
             throw new BotClientResponseException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }

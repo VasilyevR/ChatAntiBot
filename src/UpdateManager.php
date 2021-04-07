@@ -27,6 +27,7 @@ class UpdateManager
     ): void
     {
         $botSettingsService = new TelegramSettings($database);
+        $memberProcessor = new NonApprovedMemberProcessor($botClient, $database, $logger);
         try {
             $updates = $botClient->getUpdates($botSettingsService->getMessageOffset());
         } catch (BotClientResponseException $exception) {
@@ -34,6 +35,7 @@ class UpdateManager
             return;
         }
         if (empty($updates)) {
+            $memberProcessor->banNonApprovedMembers($botSettingsDto);
             return;
         }
         try {
@@ -43,7 +45,6 @@ class UpdateManager
             return;
         }
         $processorManager = new UpdateProcessorManager($botClient, $database, $logger);
-        $memberProcessor = new NonApprovedMemberProcessor($botClient, $database, $logger);
 
         foreach ($updates as $updateDto) {
             $botSettingsService->setMessageOffset($updateDto->getUpdateId() + 1);

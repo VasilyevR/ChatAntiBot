@@ -55,17 +55,24 @@ class PuzzleTask
      * @param int $attempt
      * @return void
      */
-    public function savePuzzleTask(int $chatId, int $userId, string $answer, int $messageId, int $attempt = 0): void
-    {
+    public function savePuzzleTask(
+        int $chatId,
+        int $userId,
+        string $answer,
+        int $messageId,
+        int $puzzleMessageId,
+        int $attempt = 0
+    ): void {
         $this->database->query(
             sprintf(
                 "INSERT OR REPLACE INTO puzzle_task
-    (chat_id, user_id, answer, message_id, attempt, date_time)
-     VALUES (%d, %d, '%s', %d, %d, CURRENT_TIMESTAMP)",
+    (chat_id, user_id, answer, message_id, puzzle_id, attempt, date_time)
+     VALUES (%d, %d, '%s', '%s', '%s', %d, CURRENT_TIMESTAMP)",
                 $chatId,
                 $userId,
                 $answer,
-                $messageId,
+                (string)$messageId,
+                (string)$puzzleMessageId,
                 $attempt
             )
         );
@@ -90,14 +97,14 @@ class PuzzleTask
     {
         $users = [];
         $query = sprintf(
-            "SELECT chat_id, user_id FROM puzzle_task WHERE `date_time` < datetime('now', '-%d minute')",
+            "SELECT chat_id, user_id, puzzle_id FROM puzzle_task WHERE `date_time` < datetime('now', '-%d minute')",
             $timeOutMinutes
         );
         $results = $this->database->query(
             $query
         );
         while ($row = $results->fetchArray()) {
-            $users[] = new PuzzleTaskUserDto($row['chat_id'], $row['user_id']);
+            $users[] = new PuzzleTaskUserDto($row['chat_id'], $row['user_id'], (int)$row['puzzle_id']);
         }
 
         return $users;
