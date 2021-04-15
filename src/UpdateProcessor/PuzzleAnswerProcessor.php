@@ -78,7 +78,6 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                 );
             }
             $this->deletePuzzleMessage($updateDto);
-            $this->deleteEnterMessage($updateDto);
             $this->sendWelcomeMessage($updateDto, $botSettingsDto->getWelcomeMessage());
             return;
         }
@@ -101,7 +100,6 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
             );
         }
         $this->deletePuzzleMessage($updateDto);
-        $this->deleteEnterMessage($updateDto);
     }
 
     /**
@@ -114,25 +112,6 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
         } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to delete puzzle message',
-                [
-                    'messageId' => $updateDto->getChatId(),
-                    'errorCode' => $exception->getCode(),
-                    'error' => $exception->getMessage()
-                ]
-            );
-        }
-    }
-
-    /**
-     * @param PuzzleAnswerTelegramUpdateDto $updateDto
-     */
-    private function deleteEnterMessage(PuzzleAnswerTelegramUpdateDto $updateDto): void
-    {
-        try {
-            $this->botClient->deleteMessage($updateDto->getChatId(), $updateDto->getEnterMessageId());
-        } catch (BotClientResponseException $exception) {
-            $this->logger->warning(
-                'Warning to delete enter message',
                 [
                     'messageId' => $updateDto->getChatId(),
                     'errorCode' => $exception->getCode(),
