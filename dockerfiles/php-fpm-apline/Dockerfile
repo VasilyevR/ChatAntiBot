@@ -7,6 +7,7 @@ RUN apk add --update-cache \
         php-ctype \
         php-iconv \
         php-zip \
+        php-json \
         php-sqlite3 \
         git
 RUN docker-php-ext-install intl
