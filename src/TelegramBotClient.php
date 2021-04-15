@@ -8,6 +8,7 @@ use App\Dto\PuzzleAnswerTelegramUpdateDto;
 use App\Dto\TelegramUpdateDtoInterface;
 use App\Dto\UserDto;
 use App\Exception\BotClientResponseException;
+use DateTime;
 use TgBotApi\BotApiBase\BotApi;
 use TgBotApi\BotApiBase\Exception\ResponseException;
 use TgBotApi\BotApiBase\Method\DeleteMessageMethod;
@@ -138,6 +139,7 @@ class TelegramBotClient
         $restrictMemberMethod->chatId = $chatId;
         $restrictMemberMethod->userId = $userId;
         $restrictMemberMethod->canSendMessages = false;
+        $restrictMemberMethod->untilDate = new DateTime('+59 minute');
         try {
             $this->botApi->restrict($restrictMemberMethod);
         } catch (ResponseException $exception) {
@@ -156,6 +158,7 @@ class TelegramBotClient
         $restrictMemberMethod->chatId = $chatId;
         $restrictMemberMethod->userId = $userId;
         $restrictMemberMethod->canSendMessages = true;
+        $restrictMemberMethod->untilDate = new DateTime('+60 minute');
         try {
             $this->botApi->restrict($restrictMemberMethod);
         } catch (ResponseException $exception) {
@@ -171,6 +174,7 @@ class TelegramBotClient
     public function banUser(int $chatId, int $userId): void
     {
         $kickChatMemberMethod = KickChatMemberMethod::create($chatId, $userId);
+        $kickChatMemberMethod->untilDate = new DateTime('+1 week');
         try {
             $this->botApi->kick($kickChatMemberMethod);
         } catch (ResponseException $exception) {
