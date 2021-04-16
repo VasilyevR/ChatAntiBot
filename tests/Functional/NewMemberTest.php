@@ -233,7 +233,8 @@ class NewMemberTest extends TestCase
         $streamFactory = new StreamFactory();
         $client = new Client();
         $apiClient = new ApiClient($requestFactory, $streamFactory, $client);
-        $botApi = $this->getMockBuilder(BotApi::class)
+
+        return $this->getMockBuilder(BotApi::class)
             ->setConstructorArgs(
                 [
                     'apikey', $apiClient, new BotApiNormalizer()
@@ -241,8 +242,6 @@ class NewMemberTest extends TestCase
             )
             ->setMethods(['getUpdates', 'send', 'getMe', 'restrict'])
             ->getMock();
-
-        return $botApi;
     }
 
     /**

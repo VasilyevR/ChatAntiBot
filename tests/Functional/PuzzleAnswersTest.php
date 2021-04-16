@@ -382,7 +382,8 @@ class PuzzleAnswersTest extends TestCase
         $streamFactory = new StreamFactory();
         $client = new Client();
         $apiClient = new ApiClient($requestFactory, $streamFactory, $client);
-        $botApi = $this->getMockBuilder(BotApi::class)
+
+        return $this->getMockBuilder(BotApi::class)
             ->setConstructorArgs(
                 [
                     'apikey', $apiClient, new BotApiNormalizer()
@@ -390,8 +391,6 @@ class PuzzleAnswersTest extends TestCase
             )
             ->setMethods(['getUpdates', 'send', 'getMe', 'restrict', 'kick', 'delete'])
             ->getMock();
-
-        return $botApi;
     }
 
     /**
