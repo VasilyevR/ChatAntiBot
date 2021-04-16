@@ -19,7 +19,7 @@ class PuzzleDtoTest extends TestCase
     public function testGetChoices(): void
     {
         $puzzleDto = new PuzzleDto(self::QUESTION, self::ANSWER, self::CHOICES);
-        $this->assertEquals(self::CHOICES, $puzzleDto->getChoices());
+        self::assertEquals(self::CHOICES, $puzzleDto->getChoices());
     }
 
     /**
@@ -29,7 +29,7 @@ class PuzzleDtoTest extends TestCase
     public function testGetQuestion(): void
     {
         $puzzleDto = new PuzzleDto(self::QUESTION, self::ANSWER, self::CHOICES);
-        $this->assertEquals(self::QUESTION, $puzzleDto->getQuestion());
+        self::assertEquals(self::QUESTION, $puzzleDto->getQuestion());
     }
 
     /**
@@ -39,6 +39,6 @@ class PuzzleDtoTest extends TestCase
     public function testGetAnswer(): void
     {
         $puzzleDto = new PuzzleDto(self::QUESTION, self::ANSWER, self::CHOICES);
-        $this->assertEquals(self::ANSWER, $puzzleDto->getAnswer());
+        self::assertEquals(self::ANSWER, $puzzleDto->getAnswer());
     }
 }

@@ -32,7 +32,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(self::CHAT_ID, $puzzleAnswerTelegramUpdateDto->getChatId());
+        self::assertEquals(self::CHAT_ID, $puzzleAnswerTelegramUpdateDto->getChatId());
     }
 
     /**
@@ -51,7 +51,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(self::UPDATE_ID, $puzzleAnswerTelegramUpdateDto->getUpdateId());
+        self::assertEquals(self::UPDATE_ID, $puzzleAnswerTelegramUpdateDto->getUpdateId());
     }
 
     /**
@@ -70,7 +70,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(self::ENTER_MESSAGE_ID, $puzzleAnswerTelegramUpdateDto->getEnterMessageId());
+        self::assertEquals(self::ENTER_MESSAGE_ID, $puzzleAnswerTelegramUpdateDto->getEnterMessageId());
     }
 
     /**
@@ -89,7 +89,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals($userDto, $puzzleAnswerTelegramUpdateDto->getUser());
+        self::assertEquals($userDto, $puzzleAnswerTelegramUpdateDto->getUser());
     }
 
     /**
@@ -108,7 +108,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(TelegramUpdateEnum::PUZZLE_ANSWER, $puzzleAnswerTelegramUpdateDto->getType());
+        self::assertEquals(TelegramUpdateEnum::PUZZLE_ANSWER, $puzzleAnswerTelegramUpdateDto->getType());
     }
 
     /**
@@ -127,7 +127,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(self::ANSWER, $puzzleAnswerTelegramUpdateDto->getAnswer());
+        self::assertEquals(self::ANSWER, $puzzleAnswerTelegramUpdateDto->getAnswer());
     }
 
     /**
@@ -146,7 +146,7 @@ class PuzzleAnswerTelegramUpdateDtoTest extends TestCase
             self::PUZZLE_MESSAGE_ID,
             self::ANSWER
         );
-        $this->assertEquals(self::PUZZLE_MESSAGE_ID, $puzzleAnswerTelegramUpdateDto->getPuzzleMessageId());
+        self::assertEquals(self::PUZZLE_MESSAGE_ID, $puzzleAnswerTelegramUpdateDto->getPuzzleMessageId());
     }
 
     /**

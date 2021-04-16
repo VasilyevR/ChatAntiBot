@@ -80,7 +80,7 @@ class BotSettingsDtoTest extends TestCase
 
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setWelcomeMessage($welcomeMessage);
-        $this->assertEquals($welcomeMessage, $botSettingsDto->getWelcomeMessage());
+        self::assertEquals($welcomeMessage, $botSettingsDto->getWelcomeMessage());
     }
 
     /**
@@ -94,7 +94,7 @@ class BotSettingsDtoTest extends TestCase
 
         $botSettingsDto = new BotSettingsDto();
         $botSettingsDto->setIntroMessage($introMessage);
-        $this->assertEquals($introMessage, $botSettingsDto->getIntroMessage());
+        self::assertEquals($introMessage, $botSettingsDto->getIntroMessage());
     }
 
     /**

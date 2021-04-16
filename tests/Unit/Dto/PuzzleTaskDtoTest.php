@@ -27,7 +27,7 @@ class PuzzleTaskDtoTest extends TestCase
             self::TASK_MESSAGE_ID,
             self::ATTEMPT
         );
-        $this->assertEquals(self::TASK_MESSAGE_ID, $puzzleTaskDto->getTaskMessageId());
+        self::assertEquals(self::TASK_MESSAGE_ID, $puzzleTaskDto->getTaskMessageId());
     }
 
     /**
@@ -43,7 +43,7 @@ class PuzzleTaskDtoTest extends TestCase
             self::TASK_MESSAGE_ID,
             self::ATTEMPT
         );
-        $this->assertEquals(self::ANSWER, $puzzleTaskDto->getAnswer());
+        self::assertEquals(self::ANSWER, $puzzleTaskDto->getAnswer());
     }
 
     /**
@@ -59,7 +59,7 @@ class PuzzleTaskDtoTest extends TestCase
             self::TASK_MESSAGE_ID,
             self::ATTEMPT
         );
-        $this->assertEquals(self::ATTEMPT, $puzzleTaskDto->getAttempt());
+        self::assertEquals(self::ATTEMPT, $puzzleTaskDto->getAttempt());
     }
 
     /**
@@ -75,7 +75,7 @@ class PuzzleTaskDtoTest extends TestCase
             self::TASK_MESSAGE_ID,
             self::ATTEMPT
         );
-        $this->assertEquals(self::CHAT_ID, $puzzleTaskDto->getChatId());
+        self::assertEquals(self::CHAT_ID, $puzzleTaskDto->getChatId());
     }
 
     /**
@@ -91,6 +91,6 @@ class PuzzleTaskDtoTest extends TestCase
             self::TASK_MESSAGE_ID,
             self::ATTEMPT
         );
-        $this->assertEquals(self::USER_ID, $puzzleTaskDto->getUserId());
+        self::assertEquals(self::USER_ID, $puzzleTaskDto->getUserId());
     }
 }
