@@ -5,6 +5,7 @@ namespace Tests\Unit\Dto;
 use App\Dto\NewMemberTelegramUpdateDto;
 use App\Dto\UserDto;
 use App\Enum\TelegramUpdateEnum;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class NewMemberTelegramUpdateDtoTest extends TestCase
@@ -24,6 +25,7 @@ class NewMemberTelegramUpdateDtoTest extends TestCase
         $newMemberDto = $this->getUserDtoMock();
         $newMemberTelegramUpdateDto = new NewMemberTelegramUpdateDto(
             self::UPDATE_ID,
+            new DateTimeImmutable(),
             self::CHAT_ID,
             self::MESSAGE_ID,
             [$newMemberDto]
@@ -41,6 +43,7 @@ class NewMemberTelegramUpdateDtoTest extends TestCase
         $newMemberDto = $this->getUserDtoMock();
         $newMemberTelegramUpdateDto = new NewMemberTelegramUpdateDto(
             self::UPDATE_ID,
+            new DateTimeImmutable(),
             self::CHAT_ID,
             self::MESSAGE_ID,
             [$newMemberDto]
@@ -58,6 +61,7 @@ class NewMemberTelegramUpdateDtoTest extends TestCase
         $newMemberDto = $this->getUserDtoMock();
         $newMemberTelegramUpdateDto = new NewMemberTelegramUpdateDto(
             self::UPDATE_ID,
+            new DateTimeImmutable(),
             self::CHAT_ID,
             self::MESSAGE_ID,
             [$newMemberDto]
@@ -75,6 +79,7 @@ class NewMemberTelegramUpdateDtoTest extends TestCase
         $newMemberDto = $this->getUserDtoMock();
         $newMemberTelegramUpdateDto = new NewMemberTelegramUpdateDto(
             self::UPDATE_ID,
+            new DateTimeImmutable(),
             self::CHAT_ID,
             self::MESSAGE_ID,
             [$newMemberDto]
@@ -92,6 +97,7 @@ class NewMemberTelegramUpdateDtoTest extends TestCase
         $newMemberDto = $this->getUserDtoMock();
         $newMemberTelegramUpdateDto = new NewMemberTelegramUpdateDto(
             self::UPDATE_ID,
+            new DateTimeImmutable(),
             self::CHAT_ID,
             self::MESSAGE_ID,
             [$newMemberDto]
