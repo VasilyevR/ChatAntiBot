@@ -52,12 +52,8 @@ class UnnecessaryUpdateTest extends TestCase
      * @covers \App\PuzzleTask::__construct
      * @covers \App\PuzzleTask::getNonApprovedUsers
      * @covers \App\TelegramBotClient::__construct
-     * @covers \App\TelegramBotClient::getUnnecessaryUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
-     * @covers \App\TelegramBotClient::isCorrectPuzzleAnswerUpdate
      * @covers \App\TelegramSettings::__construct
      * @covers \App\TelegramSettings::getMessageOffset
      * @covers \App\TelegramSettings::setMessageOffset
@@ -70,6 +66,10 @@ class UnnecessaryUpdateTest extends TestCase
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::processUpdate
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getUnnecessaryUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
+     * @covers \App\UpdatesProvider::isCorrectPuzzleAnswerUpdate
      */
     public function testUnnecessaryUpdate(): void
     {

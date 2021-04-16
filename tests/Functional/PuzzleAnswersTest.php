@@ -77,12 +77,8 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\PuzzleTask::getPuzzleTask
      * @covers \App\TelegramBotClient::__construct
      * @covers \App\TelegramBotClient::deleteMessage
-     * @covers \App\TelegramBotClient::getPuzzleAnswerUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
-     * @covers \App\TelegramBotClient::isCorrectPuzzleAnswerUpdate
      * @covers \App\TelegramBotClient::sendChatMessage
      * @covers \App\TelegramBotClient::unmuteUser
      * @covers \App\TelegramSettings::__construct
@@ -99,6 +95,10 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getPuzzleAnswerUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
+     * @covers \App\UpdatesProvider::isCorrectPuzzleAnswerUpdate
      */
     public function testRightAnswer(): void
     {
@@ -205,12 +205,8 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\Puzzle\RiddlePuzzleGenerator::getRiddles
      * @covers \App\TelegramBotClient::__construct
      * @covers \App\TelegramBotClient::deleteMessage
-     * @covers \App\TelegramBotClient::getPuzzleAnswerUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
-     * @covers \App\TelegramBotClient::isCorrectPuzzleAnswerUpdate
      * @covers \App\TelegramBotClient::sendKeyboardMarkupMessage
      * @covers \App\TelegramSettings::__construct
      * @covers \App\TelegramSettings::getMessageOffset
@@ -226,6 +222,10 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getPuzzleAnswerUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
+     * @covers \App\UpdatesProvider::isCorrectPuzzleAnswerUpdate
      */
     public function testWrongAnswer(): void
     {
@@ -312,12 +312,8 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\TelegramBotClient::__construct
      * @covers \App\TelegramBotClient::banUser
      * @covers \App\TelegramBotClient::deleteMessage
-     * @covers \App\TelegramBotClient::getPuzzleAnswerUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
-     * @covers \App\TelegramBotClient::isCorrectPuzzleAnswerUpdate
      * @covers \App\TelegramSettings::__construct
      * @covers \App\TelegramSettings::getMessageOffset
      * @covers \App\TelegramSettings::setMessageOffset
@@ -330,7 +326,12 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::processUpdate
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
-     * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType     */
+     * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getPuzzleAnswerUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
+     * @covers \App\UpdatesProvider::isCorrectPuzzleAnswerUpdate
+     */
     public function testWrongAnswerTwice(): void
     {
         $goodConfig = GoodConfigProvider::getGoodConfig();

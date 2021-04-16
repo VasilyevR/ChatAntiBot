@@ -5,6 +5,7 @@ namespace Tests\Functional;
 
 use App\BotSettingsLoader;
 use App\DatabaseService;
+use App\Enum\PuzzleTypeEnum;
 use App\TelegramBotClient;
 use App\UpdateManager;
 use DateTimeImmutable;
@@ -80,11 +81,8 @@ class NewMemberTest extends TestCase
      * @covers \App\Puzzle\RiddlePuzzleGenerator::getChosenAnswer
      * @covers \App\Puzzle\RiddlePuzzleGenerator::getRiddles
      * @covers \App\TelegramBotClient::__construct
-     * @covers \App\TelegramBotClient::getNewMemberUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
      * @covers \App\TelegramBotClient::muteUser
      * @covers \App\TelegramBotClient::sendKeyboardMarkupMessage
      * @covers \App\TelegramSettings::__construct
@@ -100,6 +98,9 @@ class NewMemberTest extends TestCase
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getNewMemberUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
      */
     public function testNewMemberUpdate(): void
     {
@@ -166,11 +167,8 @@ class NewMemberTest extends TestCase
      * @covers \App\PuzzleTask::__construct
      * @covers \App\PuzzleTask::getNonApprovedUsers
      * @covers \App\TelegramBotClient::__construct
-     * @covers \App\TelegramBotClient::getNewMemberUpdateDto
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
-     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
      * @covers \App\TelegramBotClient::sendChatMessage
      * @covers \App\TelegramSettings::__construct
      * @covers \App\TelegramSettings::getMessageOffset
@@ -186,12 +184,14 @@ class NewMemberTest extends TestCase
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     * @covers \App\UpdatesProvider::getNewMemberUpdateDto
+     * @covers \App\UpdatesProvider::getUpdatesDtos
+     * @covers \App\UpdatesProvider::isCorrectNewMemberUpdate
+     *
+     * @dataProvider goodConfigsProvider
      */
-    public function testNewMemberBotUpdate(): void
+    public function testNewMemberBotUpdate(string $goodConfigJson): void
     {
-        $goodConfig = GoodConfigProvider::getGoodConfig();
-        $goodConfigJson = json_encode($goodConfig[0][0]);
-
         $logger = $this->getMockLogger();
         $botApi = $this->getMockBotApi();
 
@@ -343,5 +343,32 @@ class NewMemberTest extends TestCase
         $message->messageId = 20;
 
         return $message;
+    }
+
+    /**
+     * @return array
+     */
+    public function goodConfigsProvider(): array
+    {
+        $goodConfig = GoodConfigProvider::getGoodConfig()[0][0];
+
+        $goodConfigs = [];
+
+        $goodConfig['PUZZLE_SETTINGS']['PUZZLE_TYPE'] = PuzzleTypeEnum::RIDDLES;
+        $goodConfigs[] = json_encode($goodConfig);
+
+        $goodConfig['PUZZLE_SETTINGS']['PUZZLE_TYPE'] = PuzzleTypeEnum::SIMPLE_MATH;
+        $goodConfigs[] = json_encode($goodConfig);
+
+        $goodConfig['PUZZLE_SETTINGS']['PUZZLE_TYPE'] = PuzzleTypeEnum::RANDOM_NUMBERS;
+        $goodConfigs[] = json_encode($goodConfig);
+
+        $goodConfig['PUZZLE_SETTINGS']['PUZZLE_TYPE'] = PuzzleTypeEnum::MATH;
+        $goodConfigs[] = json_encode($goodConfig);
+
+        $goodConfig['PUZZLE_SETTINGS']['PUZZLE_TYPE'] = PuzzleTypeEnum::FIRST_NUMBERS;
+        $goodConfigs[] = json_encode($goodConfig);
+
+        return [$goodConfigs];
     }
 }

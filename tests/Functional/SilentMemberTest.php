@@ -58,12 +58,12 @@ class SilentMemberTest extends TestCase
      * @covers \App\TelegramBotClient::__construct
      * @covers \App\TelegramBotClient::banUser
      * @covers \App\TelegramBotClient::deleteMessage
-     * @covers \App\TelegramBotClient::getUpdateDtos
      * @covers \App\TelegramBotClient::getUpdates
      * @covers \App\TelegramBotClient::getUserName
      * @covers \App\TelegramSettings::__construct
      * @covers \App\TelegramSettings::getMessageOffset
      * @covers \App\UpdateManager::run
+     * @covers \App\UpdatesProvider::getUpdatesDtos
      * @covers \App\UpdateProcessor\NewMembersProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
