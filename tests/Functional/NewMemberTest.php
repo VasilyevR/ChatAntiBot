@@ -105,6 +105,107 @@ class NewMemberTest extends TestCase
         $logger = $this->getMockLogger();
         $botApi = $this->getMockBotApi();
 
+        $botUserType = $this->getMockBotUserType();
+        $botApi->expects(self::once())
+            ->method('getMe')
+            ->willReturn($botUserType);
+
+        $sendMessageType = $this->getMockSentPuzzleMessageType();
+        $botApi->expects(self::once())
+            ->method('send')
+            ->willReturn($sendMessageType);
+
+        $botApi->expects(self::once())
+            ->method('restrict');
+
+        $updateType = $this->getMockRegularUpdateType();
+        $botApi->expects(self::once())
+            ->method('getUpdates')
+            ->willReturn([$updateType]);
+
+        $database = new SQLite3(':memory:', SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
+
+        $config = new Config($goodConfigJson, new Json(), true);
+        $botSettingsLoader = new BotSettingsLoader($config, $logger);
+        $botSettingsDto = $botSettingsLoader->getBotSettings();
+        $botClient = new TelegramBotClient($botApi);
+        DatabaseService::init($database);
+        $updateManager = new UpdateManager();
+        $updateManager->run($botClient, $database, $logger, $botSettingsDto);
+    }
+
+    /**
+     * @covers \App\BotSettingsLoader::__construct
+     * @covers \App\BotSettingsLoader::getBotSettings
+     * @covers \App\BotSettingsLoader::getPuzzleSettingsDto
+     * @covers \App\DatabaseService::init
+     * @covers \App\Dto\BotSettingsDto::getBotUserName
+     * @covers \App\Dto\BotSettingsDto::getIntroMessage
+     * @covers \App\Dto\BotSettingsDto::getPuzzleReplyTimeOut
+     * @covers \App\Dto\BotSettingsDto::setBotApiKey
+     * @covers \App\Dto\BotSettingsDto::setBotUserName
+     * @covers \App\Dto\BotSettingsDto::setIntroMessage
+     * @covers \App\Dto\BotSettingsDto::setPuzzleReplyAttemptCount
+     * @covers \App\Dto\BotSettingsDto::setPuzzleReplyTimeOut
+     * @covers \App\Dto\BotSettingsDto::setPuzzlesSettings
+     * @covers \App\Dto\BotSettingsDto::setWelcomeMessage
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::__construct
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getChatId
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getNewMembers
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getType
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getUpdateId
+     * @covers \App\Dto\PuzzleSettingsDto::__construct
+     * @covers \App\Dto\PuzzlesSettingsDto::__construct
+     * @covers \App\Dto\UserDto::__construct
+     * @covers \App\Dto\UserDto::getUserName
+     * @covers \App\PuzzleTask::__construct
+     * @covers \App\PuzzleTask::getNonApprovedUsers
+     * @covers \App\TelegramBotClient::__construct
+     * @covers \App\TelegramBotClient::getNewMemberUpdateDto
+     * @covers \App\TelegramBotClient::getUpdateDtos
+     * @covers \App\TelegramBotClient::getUpdates
+     * @covers \App\TelegramBotClient::getUserName
+     * @covers \App\TelegramBotClient::isCorrectNewMemberUpdate
+     * @covers \App\TelegramBotClient::sendChatMessage
+     * @covers \App\TelegramSettings::__construct
+     * @covers \App\TelegramSettings::getMessageOffset
+     * @covers \App\TelegramSettings::setMessageOffset
+     * @covers \App\UpdateManager::run
+     * @covers \App\UpdateProcessor\NewMembersProcessor::__construct
+     * @covers \App\UpdateProcessor\NewMembersProcessor::processUpdate
+     * @covers \App\UpdateProcessor\NewMembersProcessor::sendIntroMessage
+     * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::__construct
+     * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
+     * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
+     * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
+     * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
+     */
+    public function testNewMemberBotUpdate(): void
+    {
+        $goodConfig = GoodConfigProvider::getGoodConfig();
+        $goodConfigJson = json_encode($goodConfig[0][0]);
+
+        $logger = $this->getMockLogger();
+        $botApi = $this->getMockBotApi();
+
+        $botUserType = $this->getMockBotUserType();
+        $botApi->expects(self::once())
+            ->method('getMe')
+            ->willReturn($botUserType);
+
+        $sendMessageType = $this->getMockSentPuzzleMessageType();
+        $botApi->expects(self::once())
+            ->method('send')
+            ->willReturn($sendMessageType);
+
+        $botApi->expects(self::never())
+            ->method('restrict');
+
+        $updateType = $this->getMockBotUpdateType();
+        $botApi->expects(self::once())
+            ->method('getUpdates')
+            ->willReturn([$updateType]);
+
         $database = new SQLite3(':memory:', SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
 
         $config = new Config($goodConfigJson, new Json(), true);
@@ -134,24 +235,6 @@ class NewMemberTest extends TestCase
             ->setMethods(['getUpdates', 'send', 'getMe', 'restrict'])
             ->getMock();
 
-        $botUserType = $this->getMockBotUserType();
-        $botApi->expects($this->once())
-            ->method('getMe')
-            ->willReturn($botUserType);
-
-        $sendMessageType = $this->getMockSentPuzzleMessageType();
-        $botApi->expects($this->once())
-            ->method('send')
-            ->willReturn($sendMessageType);
-
-        $botApi->expects($this->once())
-            ->method('restrict');
-
-        $updateType = $this->getMockRegularUpdateType();
-        $botApi->expects($this->once())
-            ->method('getUpdates')
-            ->willReturn([$updateType]);
-
         return $botApi;
     }
 
@@ -165,13 +248,13 @@ class NewMemberTest extends TestCase
             ->setMethods(['critical', 'error', 'warning'])
             ->getMock();
 
-        $logger->expects($this->never())
+        $logger->expects(self::never())
             ->method('critical');
 
-        $logger->expects($this->never())
+        $logger->expects(self::never())
             ->method('error');
 
-        $logger->expects($this->never())
+        $logger->expects(self::never())
             ->method('warning');
 
         return $logger;
@@ -194,6 +277,32 @@ class NewMemberTest extends TestCase
         $newMember->lastName = 'LastName';
         $newMember->username = 'UserName';
         $newMember->id = 4;
+
+        $updateType = new UpdateType();
+        $updateType->updateId = 1;
+        $updateType->message = $message;
+        $updateType->message->newChatMembers = [$newMember];
+
+        return $updateType;
+    }
+
+    /**
+     * @return UpdateType
+     */
+    public function getMockBotUpdateType(): UpdateType
+    {
+        $chat = new ChatType();
+        $chat->id = 3;
+
+        $message = new MessageType();
+        $message->messageId = 2;
+        $message->chat = $chat;
+
+        $newMember = new UserType();
+        $newMember->firstName = 'BotName';
+        $newMember->lastName = 'BotName';
+        $newMember->username = 'BotName';
+        $newMember->id = 5;
 
         $updateType = new UpdateType();
         $updateType->updateId = 1;
