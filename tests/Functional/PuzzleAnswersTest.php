@@ -96,6 +96,7 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::deletePuzzleMessage
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::processUpdate
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::sendWelcomeMessage
+     * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
      */
@@ -222,6 +223,7 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::deletePuzzleMessage
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::processUpdate
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::resendPuzzleMessage
+     * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
      */
@@ -326,6 +328,7 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::deletePuzzleMessage
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::processUpdate
+     * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType     */
     public function testWrongAnswerTwice(): void

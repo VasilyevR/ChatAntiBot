@@ -7,6 +7,7 @@ use App\BotSettingsLoader;
 use App\DatabaseService;
 use App\TelegramBotClient;
 use App\UpdateManager;
+use DateTimeImmutable;
 use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Http\Factory\Guzzle\StreamFactory;
@@ -45,6 +46,7 @@ class NewMemberTest extends TestCase
      * @covers \App\Dto\BotSettingsDto::setWelcomeMessage
      * @covers \App\Dto\NewMemberTelegramUpdateDto::__construct
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getChatId
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getDateTime
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getMessageId
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getNewMembers
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getType
@@ -90,10 +92,12 @@ class NewMemberTest extends TestCase
      * @covers \App\TelegramSettings::setMessageOffset
      * @covers \App\UpdateManager::run
      * @covers \App\UpdateProcessor\NewMembersProcessor::__construct
-     * @covers \App\UpdateProcessor\NewMembersProcessor::processUpdate()
+     * @covers \App\UpdateProcessor\NewMembersProcessor::processUpdate
+     * @covers \App\UpdateProcessor\NewMembersProcessor::isLateToReply
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
+     * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::getUpdateProcessorByUpdateType
      */
@@ -151,6 +155,7 @@ class NewMemberTest extends TestCase
      * @covers \App\Dto\BotSettingsDto::setWelcomeMessage
      * @covers \App\Dto\NewMemberTelegramUpdateDto::__construct
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getChatId
+     * @covers \App\Dto\NewMemberTelegramUpdateDto::getDateTime
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getNewMembers
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getType
      * @covers \App\Dto\NewMemberTelegramUpdateDto::getUpdateId
@@ -173,7 +178,9 @@ class NewMemberTest extends TestCase
      * @covers \App\UpdateManager::run
      * @covers \App\UpdateProcessor\NewMembersProcessor::__construct
      * @covers \App\UpdateProcessor\NewMembersProcessor::processUpdate
+     * @covers \App\UpdateProcessor\NewMembersProcessor::isLateToReply
      * @covers \App\UpdateProcessor\NewMembersProcessor::sendIntroMessage
+     * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
@@ -269,6 +276,7 @@ class NewMemberTest extends TestCase
         $chat->id = 3;
 
         $message = new MessageType();
+        $message->date = new DateTimeImmutable();
         $message->messageId = 2;
         $message->chat = $chat;
 
@@ -295,6 +303,7 @@ class NewMemberTest extends TestCase
         $chat->id = 3;
 
         $message = new MessageType();
+        $message->date = new DateTimeImmutable();
         $message->messageId = 2;
         $message->chat = $chat;
 
