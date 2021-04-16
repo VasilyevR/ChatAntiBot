@@ -40,7 +40,7 @@ class BotSettingsLoaderTest extends TestCase
     {
         $config = $this->getMockConfig();
 
-        $config->expects($this->exactly(6))
+        $config->expects(self::exactly(6))
             ->method('get')
             ->willReturnMap(
                 [
@@ -56,7 +56,7 @@ class BotSettingsLoaderTest extends TestCase
         $logger = $this->getMockLogger();
         $botSettingsLoader = new BotSettingsLoader($config, $logger);
         $botSettingsDto = $botSettingsLoader->getBotSettings();
-        $this->assertInstanceOf(BotSettingsDto::class, $botSettingsDto);
+        self::assertInstanceOf(BotSettingsDto::class, $botSettingsDto);
     }
 
     /**
@@ -67,7 +67,7 @@ class BotSettingsLoaderTest extends TestCase
     {
         $config = $this->getMockConfig();
 
-        $config->expects($this->once())
+        $config->expects(self::once())
             ->method('get')
             ->willReturnMap(
                 [
@@ -192,7 +192,7 @@ class BotSettingsLoaderTest extends TestCase
     {
         $config = $this->getMockConfig();
 
-        $config->expects($this->exactly(6))
+        $config->expects(self::exactly(6))
             ->method('get')
             ->willReturnMap(
                 [
