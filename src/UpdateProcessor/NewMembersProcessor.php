@@ -10,11 +10,15 @@ use App\Exception\BotClientResponseException;
 use App\Puzzle\PuzzleFactory;
 use App\PuzzleTask;
 use App\TelegramBotClient;
+use DateInterval;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use SQLite3;
 
 class NewMembersProcessor implements UpdateProcessorInterface
 {
+    private const PERIOD_DURATION_TO_REPLY = 'PT3M';
+
     /**
      * @var TelegramBotClient
      */
@@ -48,6 +52,9 @@ class NewMembersProcessor implements UpdateProcessorInterface
      */
     public function processUpdate(TelegramUpdateDtoInterface $updateDto, BotSettingsDto $botSettingsDto): void
     {
+        if ($this->isLateToReply($updateDto->getDateTime())) {
+            return;
+        }
         $newChatMembers = $updateDto->getNewMembers();
         if (empty($newChatMembers)) {
             return;
@@ -131,5 +138,16 @@ class NewMembersProcessor implements UpdateProcessorInterface
                 ]
             );
         }
+    }
+
+    /**
+     * @param DateTimeImmutable $dateTime
+     * @return bool
+     */
+    private function isLateToReply(DateTimeImmutable $dateTime): bool
+    {
+        $before = (new DateTimeImmutable())->sub(new DateInterval(self::PERIOD_DURATION_TO_REPLY));
+
+        return  $before > $dateTime;
     }
 }
