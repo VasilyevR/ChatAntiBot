@@ -32,7 +32,7 @@ class PuzzleFactoryTest extends TestCase
             new PuzzleSettingsDto(4, [])
         );
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleSettings);
-        $this->assertInstanceOf(FirstNumbersPuzzleGenerator::class, $puzzleGenerator);
+        self::assertInstanceOf(FirstNumbersPuzzleGenerator::class, $puzzleGenerator);
     }
 
     /**
@@ -52,7 +52,7 @@ class PuzzleFactoryTest extends TestCase
             new PuzzleSettingsDto(4, [])
         );
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleSettings);
-        $this->assertInstanceOf(MathPuzzleGenerator::class, $puzzleGenerator);
+        self::assertInstanceOf(MathPuzzleGenerator::class, $puzzleGenerator);
     }
 
     /**
@@ -72,7 +72,7 @@ class PuzzleFactoryTest extends TestCase
             new PuzzleSettingsDto(4, [])
         );
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleSettings);
-        $this->assertInstanceOf(RandomNumbersPuzzleGenerator::class, $puzzleGenerator);
+        self::assertInstanceOf(RandomNumbersPuzzleGenerator::class, $puzzleGenerator);
     }
 
     /**
@@ -92,7 +92,7 @@ class PuzzleFactoryTest extends TestCase
             new PuzzleSettingsDto(4, [])
         );
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleSettings);
-        $this->assertInstanceOf(SimpleMathPuzzleGenerator::class, $puzzleGenerator);
+        self::assertInstanceOf(SimpleMathPuzzleGenerator::class, $puzzleGenerator);
     }
 
     /**
@@ -112,6 +112,6 @@ class PuzzleFactoryTest extends TestCase
             new PuzzleSettingsDto(4, [])
         );
         $puzzleGenerator = PuzzleFactory::getPuzzleGenerator($puzzleSettings);
-        $this->assertInstanceOf(RiddlePuzzleGenerator::class, $puzzleGenerator);
+        self::assertInstanceOf(RiddlePuzzleGenerator::class, $puzzleGenerator);
     }
 }
