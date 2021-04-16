@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1618590531">
-  <project timestamp="1618590531">
+<coverage generated="1618592551">
+  <project timestamp="1618592551">
     <file name="/home/vasilyevr/PhpstormProjects/ChatAntiBot/src/BotSettingsLoader.php">
       <class name="App\BotSettingsLoader" namespace="global">
         <metrics complexity="9" methods="3" coveredmethods="3" conditionals="15" coveredconditionals="15" statements="47" coveredstatements="47" elements="65" coveredelements="65"/>
@@ -286,12 +286,6 @@
       <line num="41" type="stmt" count="6"/>
       <metrics loc="43" ncloc="27" classes="1" methods="3" coveredmethods="3" conditionals="3" coveredconditionals="3" statements="5" coveredstatements="5" elements="11" coveredelements="11"/>
     </file>
-    <file name="/home/vasilyevr/PhpstormProjects/ChatAntiBot/src/Enum/PuzzleTypeEnum.php">
-      <class name="App\Enum\PuzzleTypeEnum" namespace="global">
-        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-      </class>
-      <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-    </file>
     <file name="/home/vasilyevr/PhpstormProjects/ChatAntiBot/src/Enum/TelegramUpdateEnum.php">
       <class name="App\Enum\TelegramUpdateEnum" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -395,21 +389,17 @@
     </file>
     <file name="/home/vasilyevr/PhpstormProjects/ChatAntiBot/src/Puzzle/PuzzleFactory.php">
       <class name="App\Puzzle\PuzzleFactory" namespace="global">
-        <metrics complexity="7" methods="1" coveredmethods="0" conditionals="11" coveredconditionals="10" statements="11" coveredstatements="11" elements="23" coveredelements="21"/>
+        <metrics complexity="7" methods="1" coveredmethods="0" conditionals="11" coveredconditionals="10" statements="7" coveredstatements="7" elements="19" coveredelements="17"/>
       </class>
       <line num="15" type="method" name="getPuzzleGenerator" visibility="public" complexity="7" crap="7.23" count="7"/>
       <line num="17" type="stmt" count="7"/>
-      <line num="19" type="stmt" count="7"/>
+      <line num="18" type="stmt" count="7"/>
       <line num="20" type="stmt" count="1"/>
-      <line num="21" type="stmt" count="6"/>
       <line num="22" type="stmt" count="1"/>
-      <line num="23" type="stmt" count="5"/>
       <line num="24" type="stmt" count="1"/>
-      <line num="25" type="stmt" count="4"/>
       <line num="26" type="stmt" count="3"/>
-      <line num="27" type="stmt" count="1"/>
       <line num="29" type="stmt" count="1"/>
-      <metrics loc="32" ncloc="28" classes="1" methods="1" coveredmethods="0" conditionals="11" coveredconditionals="10" statements="11" coveredstatements="11" elements="23" coveredelements="21"/>
+      <metrics loc="32" ncloc="28" classes="1" methods="1" coveredmethods="0" conditionals="11" coveredconditionals="10" statements="7" coveredstatements="7" elements="19" coveredelements="17"/>
     </file>
     <file name="/home/vasilyevr/PhpstormProjects/ChatAntiBot/src/Puzzle/PuzzleGeneratorInterface.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -938,6 +928,6 @@
       <line num="39" type="stmt" count="0"/>
       <metrics loc="39" ncloc="39" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="0" elements="16" coveredelements="0"/>
     </file>
-    <metrics files="37" loc="2425" ncloc="1807" classes="29" methods="129" coveredmethods="87" conditionals="297" coveredconditionals="211" statements="598" coveredstatements="432" elements="1024" coveredelements="730"/>
+    <metrics files="36" loc="2412" ncloc="1794" classes="29" methods="129" coveredmethods="87" conditionals="297" coveredconditionals="211" statements="594" coveredstatements="428" elements="1020" coveredelements="726"/>
   </project>
 </coverage>
