@@ -27,8 +27,9 @@ class UpdateManager
     ): void
     {
         $botSettingsService = new TelegramSettings($database);
+        $messageOffset = $botSettingsService->getMessageOffset();
         try {
-            $updates = $botClient->getUpdates($botSettingsService->getMessageOffset());
+            $updates = $botClient->getUpdates($messageOffset);
         } catch (BotClientResponseException $exception) {
             $logger->error('Error to get updates', ['code' => $exception->getCode(), 'error' => $exception->getMessage()]);
             return;
