@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use App\Enum\TelegramUpdateEnum;
+use DateTimeImmutable;
 
 class NewMemberTelegramUpdateDto implements TelegramUpdateDtoInterface
 {
@@ -11,6 +12,11 @@ class NewMemberTelegramUpdateDto implements TelegramUpdateDtoInterface
      * @var int
      */
     private $updateId;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    private $dateTime;
 
     /**
      * @var int
@@ -29,13 +35,15 @@ class NewMemberTelegramUpdateDto implements TelegramUpdateDtoInterface
 
     /**
      * @param int $updateId
+     * @param DateTimeImmutable $dateTime
      * @param int $chatId
      * @param int $messageId
      * @param UserDto[] $newMembers
      */
-    public function __construct(int $updateId, int $chatId, int $messageId, array $newMembers)
+    public function __construct(int $updateId, DateTimeImmutable $dateTime, int $chatId, int $messageId, array $newMembers)
     {
         $this->updateId = $updateId;
+        $this->dateTime = $dateTime;
         $this->chatId = $chatId;
         $this->messageId = $messageId;
         $this->newMembers = $newMembers;
@@ -55,6 +63,14 @@ class NewMemberTelegramUpdateDto implements TelegramUpdateDtoInterface
     public function getType(): string
     {
         return TelegramUpdateEnum::NEW_MEMBER;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getDateTime(): DateTimeImmutable
+    {
+        return $this->dateTime;
     }
 
     /**
@@ -80,4 +96,5 @@ class NewMemberTelegramUpdateDto implements TelegramUpdateDtoInterface
     {
         return $this->newMembers;
     }
+
 }
