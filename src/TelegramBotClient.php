@@ -6,6 +6,7 @@ namespace App;
 use App\Dto\NewMemberTelegramUpdateDto;
 use App\Dto\PuzzleAnswerTelegramUpdateDto;
 use App\Dto\TelegramUpdateDtoInterface;
+use App\Dto\UnnecessaryTelegramUpdateDto;
 use App\Dto\UserDto;
 use App\Exception\BotClientResponseException;
 use DateTime;
@@ -30,6 +31,9 @@ class TelegramBotClient
      */
     private $botApi;
 
+    /**
+     * @param BotApi $botApi
+     */
     public function __construct(BotApi $botApi)
     {
         $this->botApi = $botApi;
@@ -196,7 +200,9 @@ class TelegramBotClient
             }
             if ($this->isCorrectPuzzleAnswerUpdate($update)) {
                 $updateResultsDtos[] = $this->getPuzzleAnswerUpdateDto($update);
+                continue;
             }
+            $updateResultsDtos[] = $this->getUnnecessaryUpdateDto($update);
         }
 
         return $updateResultsDtos;
@@ -217,6 +223,7 @@ class TelegramBotClient
         );
         return new NewMemberTelegramUpdateDto(
             $update->updateId,
+            $update->message->date,
             $update->message->chat->id,
             $update->message->messageId,
             $newMembers
@@ -243,6 +250,17 @@ class TelegramBotClient
             $replyToMessage->messageId,
             $message->messageId,
             $update->callbackQuery->data);
+    }
+
+    /**
+     * @param UpdateType $update
+     * @return UnnecessaryTelegramUpdateDto
+     */
+    private function getUnnecessaryUpdateDto(UpdateType $update): UnnecessaryTelegramUpdateDto
+    {
+        return new UnnecessaryTelegramUpdateDto(
+            $update->updateId
+        );
     }
 
     /**
