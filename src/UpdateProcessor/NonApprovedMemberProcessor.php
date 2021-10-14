@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\UpdateProcessor;
 
 use App\Dto\BotSettingsDto;
-use App\Dto\PuzzleAnswerTelegramUpdateDto;
 use App\Dto\PuzzleTaskUserDto;
 use App\Exception\BotClientResponseException;
 use App\PuzzleTask;
@@ -52,6 +51,7 @@ class NonApprovedMemberProcessor
             $chatId = $taskUserDto->getChatId();
             $userId = $taskUserDto->getUserId();
             $this->deletePuzzleMessage($taskUserDto);
+            $this->deleteEnterMessage($taskUserDto);
             try {
                 $this->botClient->banUser($chatId, $userId);
             } catch (BotClientResponseException $exception) {
@@ -75,12 +75,31 @@ class NonApprovedMemberProcessor
     private function deletePuzzleMessage(PuzzleTaskUserDto $taskUserDto): void
     {
         try {
-            $this->botClient->deleteMessage($taskUserDto->getChatId(), $taskUserDto->getMessageId());
+            $this->botClient->deleteMessage($taskUserDto->getChatId(), $taskUserDto->getPuzzleMessageId());
         } catch (BotClientResponseException $exception) {
             $this->logger->warning(
                 'Warning to delete puzzle message',
                 [
-                    'messageId' => $taskUserDto->getMessageId(),
+                    'messageId' => $taskUserDto->getEnterMessageId(),
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param PuzzleTaskUserDto $taskUserDto
+     */
+    private function deleteEnterMessage(PuzzleTaskUserDto $taskUserDto): void
+    {
+        try {
+            $this->botClient->deleteMessage($taskUserDto->getChatId(), $taskUserDto->getEnterMessageId());
+        } catch (BotClientResponseException $exception) {
+            $this->logger->warning(
+                'Warning to delete enter message',
+                [
+                    'messageId' => $taskUserDto->getEnterMessageId(),
                     'errorCode' => $exception->getCode(),
                     'error' => $exception->getMessage()
                 ]

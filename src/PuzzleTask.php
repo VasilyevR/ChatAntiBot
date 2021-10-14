@@ -52,6 +52,7 @@ class PuzzleTask
      * @param int $userId
      * @param string $answer
      * @param int $messageId
+     * @param int $puzzleMessageId
      * @param int $attempt
      * @return void
      */
@@ -97,14 +98,14 @@ class PuzzleTask
     {
         $users = [];
         $query = sprintf(
-            "SELECT chat_id, user_id, puzzle_id FROM puzzle_task WHERE `date_time` < datetime('now', '-%d minute')",
+            "SELECT chat_id, user_id, message_id, puzzle_id FROM puzzle_task WHERE `date_time` < datetime('now', '-%d minute')",
             $timeOutMinutes
         );
         $results = $this->database->query(
             $query
         );
         while ($row = $results->fetchArray()) {
-            $users[] = new PuzzleTaskUserDto($row['chat_id'], $row['user_id'], (int)$row['puzzle_id']);
+            $users[] = new PuzzleTaskUserDto($row['chat_id'], $row['user_id'], (int)$row['message_id'], (int)$row['puzzle_id']);
         }
 
         return $users;

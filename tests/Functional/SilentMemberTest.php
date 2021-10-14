@@ -49,7 +49,8 @@ class SilentMemberTest extends TestCase
      * @covers \App\Dto\PuzzleSettingsDto::__construct
      * @covers \App\Dto\PuzzleTaskUserDto::__construct
      * @covers \App\Dto\PuzzleTaskUserDto::getChatId
-     * @covers \App\Dto\PuzzleTaskUserDto::getMessageId
+     * @covers \App\Dto\PuzzleTaskUserDto::getPuzzleMessageId
+     * @covers \App\Dto\PuzzleTaskUserDto::getEnterMessageId
      * @covers \App\Dto\PuzzleTaskUserDto::getUserId
      * @covers \App\Dto\PuzzlesSettingsDto::__construct
      * @covers \App\PuzzleTask::__construct
@@ -68,6 +69,7 @@ class SilentMemberTest extends TestCase
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::__construct
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::deletePuzzleMessage
+     * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::deleteEnterMessage
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
@@ -89,7 +91,7 @@ class SilentMemberTest extends TestCase
             ->method('getMe')
             ->willReturn($botUserType);
 
-        $botApi->expects(self::once())
+        $botApi->expects(self::exactly(2))
             ->method('delete');
 
         $botApi->expects(self::never())

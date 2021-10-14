@@ -18,17 +18,24 @@ class PuzzleTaskUserDto
     /**
      * @var int
      */
-    private $messageId;
+    private $enterMessageId;
+
+    /**
+     * @var int
+     */
+    private $puzzleMessageId;
 
     /**
      * @param int $chatId
      * @param int $userId
-     * @param int $messageId
+     * @param int $enterMessageId
+     * @param int $puzzleMessageId
      */
-    public function __construct(int $chatId, int $userId, int $messageId) {
+    public function __construct(int $chatId, int $userId, int $enterMessageId, int $puzzleMessageId) {
         $this->chatId = $chatId;
         $this->userId = $userId;
-        $this->messageId = $messageId;
+        $this->enterMessageId = $enterMessageId;
+        $this->puzzleMessageId = $puzzleMessageId;
     }
 
     /**
@@ -50,8 +57,16 @@ class PuzzleTaskUserDto
     /**
      * @return int
      */
-    public function getMessageId(): int
+    public function getEnterMessageId(): int
     {
-        return $this->messageId;
+        return $this->enterMessageId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPuzzleMessageId(): int
+    {
+        return $this->puzzleMessageId;
     }
 }

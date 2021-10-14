@@ -323,6 +323,7 @@ class PuzzleAnswersTest extends TestCase
      * @covers \App\UpdateProcessor\NonApprovedMemberProcessor::banNonApprovedMembers
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::__construct
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::deletePuzzleMessage
+     * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::deleteEnterMessage
      * @covers \App\UpdateProcessor\PuzzleAnswerProcessor::processUpdate
      * @covers \App\UpdateProcessor\UnnecessaryProcessor::__construct
      * @covers \App\UpdateProcessor\UpdateProcessorManager::__construct
@@ -350,7 +351,7 @@ class PuzzleAnswersTest extends TestCase
             ->method('getMe')
             ->willReturn($botUserType);
 
-        $botApi->expects(self::once())
+        $botApi->expects(self::exactly(2))
             ->method('delete');
 
         $botApi->expects(self::never())

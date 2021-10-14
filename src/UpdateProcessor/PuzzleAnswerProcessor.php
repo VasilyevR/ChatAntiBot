@@ -100,6 +100,7 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
             );
         }
         $this->deletePuzzleMessage($updateDto);
+        $this->deleteEnterMessage($puzzleTaskDto);
     }
 
     /**
@@ -114,6 +115,25 @@ class PuzzleAnswerProcessor implements UpdateProcessorInterface
                 'Warning to delete puzzle message',
                 [
                     'messageId' => $updateDto->getChatId(),
+                    'errorCode' => $exception->getCode(),
+                    'error' => $exception->getMessage()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param PuzzleTaskDto $puzzleTaskDto
+     */
+    private function deleteEnterMessage(PuzzleTaskDto $puzzleTaskDto): void
+    {
+        try {
+            $this->botClient->deleteMessage($puzzleTaskDto->getChatId(), $puzzleTaskDto->getTaskMessageId());
+        } catch (BotClientResponseException $exception) {
+            $this->logger->warning(
+                'Warning to delete enter message',
+                [
+                    'messageId' => $puzzleTaskDto->getChatId(),
                     'errorCode' => $exception->getCode(),
                     'error' => $exception->getMessage()
                 ]
